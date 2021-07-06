@@ -4,6 +4,8 @@ import com.codecool.shop.dao.ProductCategoryDao;
 import com.codecool.shop.dao.ProductDao;
 import com.codecool.shop.dao.implementation.ProductCategoryDaoMem;
 import com.codecool.shop.dao.implementation.ProductDaoMem;
+import com.codecool.shop.model.Product;
+import com.codecool.shop.model.ProductCategory;
 import com.codecool.shop.service.ProductService;
 import com.codecool.shop.config.TemplateEngineUtil;
 import org.thymeleaf.TemplateEngine;
@@ -15,7 +17,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @WebServlet(urlPatterns = {"/"})
@@ -30,9 +34,25 @@ public class ProductController extends HttpServlet {
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
 
+
+        List<ProductCategory> productCategoryList = productCategoryDataStore.getAll();
+
+        for (var productCategory: productCategoryList) {
+            var categoryProducts = productService.getProductsForCategory(productCategory.getId());
+            productCategory.setProducts((ArrayList<Product>) categoryProducts);
+        }
+//        System.out.println(productCategoryList);
+//        System.out.println(productCategoryList.get(0).getProducts());
+//        System.out.println(productCategoryList.get(1).getProducts());
+
+
         context.setVariable("categories", productCategoryDataStore.getAll());
         context.setVariable("category", productService.getProductCategory(1));
+
         context.setVariable("products", productService.getProductsForCategory(1));
+
+
+
 //        System.out.println(productCategoryDataStore.getAll());
 //        context.setVariable("category2", productService.getProductCategory(2));
 //        context.setVariable("products2", productService.getProductsForCategory(2));
