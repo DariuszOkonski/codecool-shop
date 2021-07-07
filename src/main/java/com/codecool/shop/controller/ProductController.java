@@ -28,14 +28,18 @@ import java.util.stream.Collectors;
 
 @WebServlet(urlPatterns = {"/"})
 public class ProductController extends HttpServlet {
+    private ProductDao productDataStore = ProductDaoMem.getInstance();
+    private ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
+    private SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
+    private ProductService productService = new ProductService(productDataStore,productCategoryDataStore, supplierDataStore);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ProductDao productDataStore = ProductDaoMem.getInstance();
-        ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
-        SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
+//        ProductDao productDataStore = ProductDaoMem.getInstance();
+//        ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
+//        SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
 
-        ProductService productService = new ProductService(productDataStore,productCategoryDataStore, supplierDataStore);
+//        ProductService productService = new ProductService(productDataStore,productCategoryDataStore, supplierDataStore);
 
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
@@ -48,46 +52,46 @@ public class ProductController extends HttpServlet {
         List<Supplier> suppliers = supplierDataStore.getAll();
 
 
-        if (req.getParameter("category_id") != null && Integer.parseInt(req.getParameter("supplier_id")) != 0) {
+        boolean categoryProvided = req.getParameter("category_id") != null;
+        boolean categoryAndSupplierProvided = categoryProvided && Integer.parseInt(req.getParameter("supplier_id")) != 0;
+        boolean supplierProvided = req.getParameter("supplier_id") != null && Integer.parseInt(req.getParameter("supplier_id")) != 0;
+
+        if (categoryAndSupplierProvided) {
+
+           products = filterByCategoryAndSupplier(req);
+
+        }else if (categoryProvided) {
             category_id = Integer.parseInt(req.getParameter("category_id"));
-            supplier_id = Integer.parseInt(req.getParameter("supplier_id"));
             products = productService.getProductsForCategory(category_id);
-            int finalSupplier_id = supplier_id;
-            products = products.stream()
-                    .filter(product -> product.getSupplier().getId() == finalSupplier_id)
-                    .collect(Collectors.toList());
-        }else if (req.getParameter("category_id") != null) {
-            category_id = Integer.parseInt(req.getParameter("category_id"));
-            products = productService.getProductsForCategory(category_id);
-        }else if (req.getParameter("supplier_id") != null && Integer.parseInt(req.getParameter("supplier_id")) != 0) {
+        }else if (supplierProvided) {
             supplier_id = Integer.parseInt(req.getParameter("supplier_id"));
             products = productService.getProductsForSupplier(supplier_id);
         } else {
             products = productService.getProductsForCategory(category_id);
         }
-        System.out.println(productService.getProductsForSupplier(supplier_id));
 
+
+        setContextVariables(productCategoryDataStore, productService, context, category_id, products, suppliers);
+
+        engine.process("product/index.html", context, resp.getWriter());
+    }
+
+    private List<Product> filterByCategoryAndSupplier(HttpServletRequest req) {
+        int category_id = Integer.parseInt(req.getParameter("category_id"));
+        int supplier_id = Integer.parseInt(req.getParameter("supplier_id"));
+        List<Product> products = productService.getProductsForCategory(category_id);
+        int finalSupplier_id = supplier_id;
+        return products.stream()
+                .filter(product -> product.getSupplier().getId() == finalSupplier_id)
+                .collect(Collectors.toList());
+    }
+
+    private void setContextVariables(ProductCategoryDao productCategoryDataStore, ProductService productService, WebContext context, int category_id, List<Product> products, List<Supplier> suppliers) {
         context.setVariable("categories", productCategoryDataStore.getAll());
         context.setVariable("category", productService.getProductCategory(category_id));
         context.setVariable("suppliers", suppliers);
 
         context.setVariable("products", products);
-
-
-//        for (var productCategory: productCategoryList) {
-//            var categoryProducts = productService.getProductsForCategory(productCategory.getId());
-//            productCategory.setProducts((ArrayList<Product>) categoryProducts);
-//        }
-
-//        System.out.println(productCategoryDataStore.getAll());
-//        context.setVariable("category2", productService.getProductCategory(2));
-//        context.setVariable("products2", productService.getProductsForCategory(2));
-//        // // Alternative setting of the template context
-        // Map<String, Object> params = new HashMap<>();
-        // params.put("category", productCategoryDataStore.find(1));
-        // params.put("products", productDataStore.getBy(productCategoryDataStore.find(1)));
-        // context.setVariables(params);
-        engine.process("product/index.html", context, resp.getWriter());
     }
 
 }
