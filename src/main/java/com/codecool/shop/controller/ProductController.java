@@ -35,22 +35,13 @@ public class ProductController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        ProductDao productDataStore = ProductDaoMem.getInstance();
-//        ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
-//        SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
-
-//        ProductService productService = new ProductService(productDataStore,productCategoryDataStore, supplierDataStore);
-
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
-
-        // TODO 1. category - list<products> 2. supplier(list<products>) - ...
 
         int category_id = 1; //default value
         int supplier_id = 0; //default value
         List<Product> products = new ArrayList<>();
         List<Supplier> suppliers = supplierDataStore.getAll();
-
 
         boolean categoryProvided = req.getParameter("category_id") != null;
         boolean categoryAndSupplierProvided = categoryProvided && Integer.parseInt(req.getParameter("supplier_id")) != 0;
@@ -69,7 +60,6 @@ public class ProductController extends HttpServlet {
         } else {
             products = productService.getProductsForCategory(category_id);
         }
-
 
         setContextVariables(productCategoryDataStore, productService, context, category_id, products, suppliers);
 
@@ -90,7 +80,6 @@ public class ProductController extends HttpServlet {
         context.setVariable("categories", productCategoryDataStore.getAll());
         context.setVariable("category", productService.getProductCategory(category_id));
         context.setVariable("suppliers", suppliers);
-
         context.setVariable("products", products);
     }
 
