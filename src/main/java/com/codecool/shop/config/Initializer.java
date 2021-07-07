@@ -39,5 +39,11 @@ public class Initializer implements ServletContextListener {
         productDataStore.add(new Product("Amazon Fire", 49.9f, "USD", "Fantastic price. Large content ecosystem. Good parental controls. Helpful technical support.", tablet, amazon));
         productDataStore.add(new Product("Lenovo IdeaPad Miix 700", 479, "USD", "Keyboard cover is included. Fanless Core m5 processor. Full-size USB ports. Adjustable kickstand.", tablet, lenovo));
         productDataStore.add(new Product("Amazon Fire HD 8", 89, "USD", "Amazon's latest Fire HD 8 tablet is a great value for media consumption.", tablet, amazon));
+
+        productDataStore.add(new Product("Huawei MateBook D 15 i5", 89, "USD", "Amazon's latest Fire HD 8 tablet is a great value for media consumption.", laptops, amazon));
+        productDataStore.add(new Product("Acer Aspire 3 i5-1135G7", 89, "USD", "Amazon's latest Fire HD 8 tablet is a great value for media consumption.", laptops, amazon));
+        productDataStore.add(new Product("Huawei MateBook 13", 89, "USD", "Amazon's latest Fire HD 8 tablet is a great value for media consumption.", laptops, amazon));
+
+
     }
 }

@@ -37,19 +37,19 @@ public class ProductController extends HttpServlet {
 
         List<ProductCategory> productCategoryList = productCategoryDataStore.getAll();
 
-        for (var productCategory: productCategoryList) {
-            var categoryProducts = productService.getProductsForCategory(productCategory.getId());
-            productCategory.setProducts((ArrayList<Product>) categoryProducts);
-        }
-//        System.out.println(productCategoryList);
-//        System.out.println(productCategoryList.get(0).getProducts());
-//        System.out.println(productCategoryList.get(1).getProducts());
+//        for (var productCategory: productCategoryList) {
+//            var categoryProducts = productService.getProductsForCategory(productCategory.getId());
+//            productCategory.setProducts((ArrayList<Product>) categoryProducts);
+//        }
 
+        int category_id = 1; //default value
+
+        if (req.getParameter("category_id") != null) category_id = Integer.parseInt(req.getParameter("category_id"));
 
         context.setVariable("categories", productCategoryDataStore.getAll());
-        context.setVariable("category", productService.getProductCategory(1));
+        context.setVariable("category", productService.getProductCategory(category_id));
 
-        context.setVariable("products", productService.getProductsForCategory(1));
+        context.setVariable("products", productService.getProductsForCategory(category_id));
 
 
 

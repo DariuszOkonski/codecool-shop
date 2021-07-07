@@ -35,22 +35,18 @@
 </div>
 
 <div class="container">
-    <div class="dropdown">
+    <div class="dropdown p-1">
         <button class="btn btn-secondary dropdown-toggle"
                 type="button" id="dropdownMenu1" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-            Dropdown
+                aria-haspopup="true" aria-expanded="false" th:text="${category.name}">
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
 
             <div th:each="cat, iterStat : ${categories}">
-                <a class="dropdown-item" href="#!" th:href="${cat.getName()}" th:text="${cat.getName()}">name</a>
+                <a class="dropdown-item" href="#!" th:href="@{/(category_id=${cat.getId()})}" th:text="${cat.getName()}">name</a>
             </div>
 
         </div>
-    </div>
-    <div class="card">
-        <strong th:text="${category.name}">Category Title</strong>
     </div>
 
     <div id="products" class="row">
