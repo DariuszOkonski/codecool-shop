@@ -27,9 +27,17 @@ public class Cart extends BaseModel {
         }
     }
 
-    // TODO : implement
     public BigDecimal getSumPrice() {
-        return null;
+
+        BigDecimal total = new BigDecimal(0);
+
+        for (Product product : this.productsWithQuantityList.keySet()) {
+            BigDecimal price = new BigDecimal(product.getPrice());
+            BigDecimal quantity = new BigDecimal(productsWithQuantityList.get(product));
+            total.add(price.multiply(quantity));
+        }
+
+        return total;
     }
 
 }
