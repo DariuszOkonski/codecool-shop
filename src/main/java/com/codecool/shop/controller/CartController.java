@@ -21,18 +21,18 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet(urlPatterns = {"/add_to_cart"})
-public class CartController extends HttpServlet {
+public class CartController extends BaseController {
 
-    private ProductDao productDataStore = ProductDaoMem.getInstance();
-    private ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
-    private SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
-    private CartDao cartDataStore = CartDaoMem.getInstance();
-    private ProductService productService = new ProductService(productDataStore,productCategoryDataStore, supplierDataStore);
+//    private ProductDao productDataStore = ProductDaoMem.getInstance();
+//    private ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
+//    private SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
+//    private CartDao cartDataStore = CartDaoMem.getInstance();
+//    private ProductService productService = new ProductService(productDataStore,productCategoryDataStore, supplierDataStore);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
-        WebContext context = new WebContext(req, resp, req.getServletContext());
+        setTemplateContext(req, resp);
+        serviceSessionValidation(req);
     }
 
     @Override

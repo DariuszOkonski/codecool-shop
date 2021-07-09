@@ -28,19 +28,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @WebServlet(urlPatterns = {"/"})
-public class ProductController extends HttpServlet {
+public class ProductController extends BaseController {
 //    private int sessionsInside = 1;
-    private ProductDao productDataStore = ProductDaoMem.getInstance();
-    private ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
-    private SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
-    private CartDao cartDataStore = CartDaoMem.getInstance();
-    private ProductService productService = new ProductService(productDataStore,productCategoryDataStore, supplierDataStore);
+//    private ProductDao productDataStore = ProductDaoMem.getInstance();
+//    private ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
+//    private SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
+//    private CartDao cartDataStore = CartDaoMem.getInstance();
+//    private ProductService productService = new ProductService(productDataStore,productCategoryDataStore, supplierDataStore);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
-        WebContext context = new WebContext(req, resp, req.getServletContext());
+//        TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
+//        WebContext context = new WebContext(req, resp, req.getServletContext());
 
+        setTemplateContext(req, resp);
         serviceSessionValidation(req);
 
         int category_id = 1; //default value
@@ -90,25 +91,6 @@ public class ProductController extends HttpServlet {
         context.setVariable("products", products);
         context.setVariable("userId", sessionID);
         context.setVariable("itemsInCart", itemsInCart);
-    }
-
-    private boolean doesCartSessionExist(HttpServletRequest req){
-        HttpSession session = req.getSession();
-        boolean isUserInSession = session.getAttribute("user_id") != null;
-        return isUserInSession;
-    }
-
-    private void setSessionCart(HttpServletRequest req) {
-        String sessionId = req.getSession().getId();
-        cartDataStore.add(new Cart(sessionId));
-    }
-
-    private void serviceSessionValidation(HttpServletRequest req) {
-        if (!doesCartSessionExist(req)){
-            System.out.println("Session setting");
-            setSessionCart(req);
-        }
-        System.out.println(req.getSession().getId());
     }
 
 }
