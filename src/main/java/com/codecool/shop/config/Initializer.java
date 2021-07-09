@@ -51,3 +51,5 @@ public class Initializer implements ServletContextListener {
         cartDataStore.add(new Cart("temporary"));
     }
 }
+
+// check if session ? create new Cart : cart istnieje

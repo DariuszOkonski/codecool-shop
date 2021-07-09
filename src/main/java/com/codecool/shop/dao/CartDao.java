@@ -11,4 +11,5 @@ public interface CartDao {
     void add(Cart cart);
     void remove(int id);
     Cart find(int id);
+    Cart getByName(String name);
 }

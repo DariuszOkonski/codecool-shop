@@ -44,9 +44,9 @@ public class CartController extends HttpServlet {
 
         System.out.println(productId + quantity);
 
-        cartDataStore.find(1).addProduct(productDataStore.find(productId), quantity);
+        cartDataStore.getByName(req.getSession().getId()).addProduct(productDataStore.find(productId), quantity);
 
-        System.out.println(cartDataStore.find(1).toString());
+        System.out.println(cartDataStore.getByName(req.getSession().getId()).toString());
 
 
         //redirect to main page

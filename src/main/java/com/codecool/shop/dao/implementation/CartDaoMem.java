@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CartDaoMem implements CartDao {
     private List<Cart> data = new ArrayList<>();
@@ -21,6 +22,14 @@ public class CartDaoMem implements CartDao {
             instance = new CartDaoMem();
         }
         return instance;
+    }
+
+    @Override
+    public Cart getByName(String name) {
+        return data.stream()
+                .filter(cart -> cart.getName() == name)
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
