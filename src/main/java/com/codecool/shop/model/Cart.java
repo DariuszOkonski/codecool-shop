@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.text.DecimalFormat;
 
 public class Cart extends BaseModel {
 
@@ -46,6 +47,20 @@ public class Cart extends BaseModel {
         }
 
         return total;
+    }
+
+    public String getProductTotal(Product product) {
+
+        BigDecimal countOfGivenProduct = new BigDecimal(productsWithQuantityList.get(product));
+
+        DecimalFormat decimalFormat = new DecimalFormat();
+
+        String s = decimalFormat.format(countOfGivenProduct.multiply(new BigDecimal(product.getPrice())));
+
+        System.out.println(s);
+
+        return "100";
+
     }
 
 }

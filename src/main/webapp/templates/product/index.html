@@ -30,25 +30,7 @@
 
 <body>
 
-<ul class="nav justify-content-end">
-<!--    <li class="nav-item">-->
-<!--        <a class="nav-link active" aria-current="page" href="#">Active</a>-->
-<!--    </li>-->
-<!--    <li class="nav-item">-->
-<!--        <a class="nav-link" href="#">Link</a>-->
-<!--    </li>-->
-    <li class="nav-item">
-        <a class="nav-link" href="#" th:text="${userId}">User </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true" th:text="${itemsInCart}">Disabled</a>
-    </li>
-</ul>
-
-<div class="jumbotron text-center">
-    <h1>Codecool Shop</h1>
-
-</div>
+<header th:replace="header.html :: header"></header>
 
 <div class="container">
     <div class="d-flex flex-row">
@@ -102,7 +84,7 @@
                         <p class="lead" th:text="${prod.getPrice()}">100 USD</p>
                     </div>
                     <div class="card-text">
-                        <form action="/add_to_cart" method="post">
+                        <form action="/cart" method="post">
                         <input type="hidden" name="product_id" th:value="${prod.id}">
                         <input type="hidden" name="quantity" value="1">
                         <input type="submit" class="btn btn-success" value="Add to cart" />

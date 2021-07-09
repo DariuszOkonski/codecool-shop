@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<body>
+<header th:fragment="header">
+<ul class="nav justify-content-end">
+  <!--    <li class="nav-item">-->
+  <!--        <a class="nav-link active" aria-current="page" href="#">Active</a>-->
+  <!--    </li>-->
+  <!--    <li class="nav-item">-->
+  <!--        <a class="nav-link" href="#">Link</a>-->
+  <!--    </li>-->
+  <li class="nav-item">
+    <a class="nav-link" href="#" th:text="${userId}">User </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/cart" tabindex="-1" aria-disabled="true" th:text="'Items in Cart: ' + ${itemsInCart}">Disabled</a>
+  </li>
+</ul>
+
+<div class="jumbotron text-center">
+  <h1>Codecool Shop</h1>
+
+</div>
+</header>
+
+
+</body>
+</html>
