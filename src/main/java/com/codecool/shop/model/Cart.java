@@ -27,6 +27,14 @@ public class Cart extends BaseModel {
         }
     }
 
+    public int getTotalProductCount() {
+        int total = 0;
+        for (int quantity: productsWithQuantityList.values()) {
+            total += quantity;
+        }
+        return total;
+    }
+
     public BigDecimal getSumPrice() {
 
         BigDecimal total = new BigDecimal(0);

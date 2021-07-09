@@ -66,7 +66,9 @@ public class ProductController extends HttpServlet {
             products = productService.getProductsForCategory(category_id);
         }
 
-        setContextVariables(productCategoryDataStore, productService, context, category_id, products, suppliers);
+        int totalInCart = cartDataStore.getByName(req.getSession().getId()).getTotalProductCount();
+
+        setContextVariables(productCategoryDataStore, productService, context, category_id, products, suppliers, req.getSession().getId(), totalInCart);
 
         engine.process("product/index.html", context, resp.getWriter());
     }
@@ -81,11 +83,13 @@ public class ProductController extends HttpServlet {
                 .collect(Collectors.toList());
     }
 
-    private void setContextVariables(ProductCategoryDao productCategoryDataStore, ProductService productService, WebContext context, int category_id, List<Product> products, List<Supplier> suppliers) {
+    private void setContextVariables(ProductCategoryDao productCategoryDataStore, ProductService productService, WebContext context, int category_id, List<Product> products, List<Supplier> suppliers, String sessionID, int itemsInCart) {
         context.setVariable("categories", productCategoryDataStore.getAll());
         context.setVariable("category", productService.getProductCategory(category_id));
         context.setVariable("suppliers", suppliers);
         context.setVariable("products", products);
+        context.setVariable("userId", sessionID);
+        context.setVariable("itemsInCart", itemsInCart);
     }
 
     private boolean doesCartSessionExist(HttpServletRequest req){
