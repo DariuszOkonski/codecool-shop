@@ -29,17 +29,8 @@ import java.util.stream.Collectors;
 
 @WebServlet(urlPatterns = {"/"})
 public class ProductController extends BaseController {
-//    private int sessionsInside = 1;
-//    private ProductDao productDataStore = ProductDaoMem.getInstance();
-//    private ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
-//    private SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
-//    private CartDao cartDataStore = CartDaoMem.getInstance();
-//    private ProductService productService = new ProductService(productDataStore,productCategoryDataStore, supplierDataStore);
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
-//        WebContext context = new WebContext(req, resp, req.getServletContext());
 
         setTemplateContext(req, resp);
         serviceSessionValidation(req);
@@ -85,6 +76,7 @@ public class ProductController extends BaseController {
     }
 
     private void setContextVariables(ProductCategoryDao productCategoryDataStore, ProductService productService, WebContext context, int category_id, List<Product> products, List<Supplier> suppliers, String sessionID, int itemsInCart) {
+        // TODO: check if refactorable
         context.setVariable("categories", productCategoryDataStore.getAll());
         context.setVariable("category", productService.getProductCategory(category_id));
         context.setVariable("suppliers", suppliers);
