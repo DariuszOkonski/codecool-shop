@@ -1,6 +1,7 @@
 package com.codecool.shop.model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,17 +50,13 @@ public class Cart extends BaseModel {
         return total;
     }
 
-    public String getProductTotal(Product product) {
+    public BigDecimal getProductTotal(Product product) {
 
         BigDecimal countOfGivenProduct = new BigDecimal(productsWithQuantityList.get(product));
 
-        DecimalFormat decimalFormat = new DecimalFormat();
+        BigDecimal total = countOfGivenProduct.multiply(new BigDecimal(product.getDefaultPrice()));
 
-        String s = decimalFormat.format(countOfGivenProduct.multiply(new BigDecimal(product.getPrice())));
-
-        System.out.println(s);
-
-        return "100";
+        return total.setScale(2, RoundingMode.HALF_UP);
 
     }
 

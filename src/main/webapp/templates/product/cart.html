@@ -69,7 +69,7 @@
                           <input id="quantity" type="number" name="quantity" th:value="${cart.getProductsWithQuantityList().get(prod)}" class="form-control quantity-input">
                         </div>
                         <div class="col-md-3 price">
-                          <span th:text="${cart.getProductTotal(prod)}"></span>
+                            <span th:text="${cart.getProductTotal(prod)} + ' ' + ${prod.getDefaultCurrency()}"></span>
                         </div>
                       </div>
                     </div>
