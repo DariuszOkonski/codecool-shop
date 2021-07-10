@@ -41,10 +41,13 @@ public class Cart extends BaseModel {
 
         BigDecimal total = new BigDecimal(0);
 
+
         for (Product product : this.productsWithQuantityList.keySet()) {
-            BigDecimal price = new BigDecimal(product.getDefaultPrice());
-            BigDecimal quantity = new BigDecimal(productsWithQuantityList.get(product));
-            total.add(price.multiply(quantity));
+//            BigDecimal price = new BigDecimal(product.getDefaultPrice());
+//            BigDecimal quantity = new BigDecimal(productsWithQuantityList.get(product));
+//            BigDecimal multiplicationResult = price.multiply(quantity);
+
+            total = total.add(getProductTotal(product));
         }
 
         return total.setScale(2, RoundingMode.HALF_UP);
