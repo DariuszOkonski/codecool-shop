@@ -59,4 +59,8 @@ public class Cart extends BaseModel {
 
     }
 
+    public void modifyProductQuantity(Product product, int quantity) {
+        this.productsWithQuantityList.put(product, quantity);
+
+    }
 }
