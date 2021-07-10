@@ -52,7 +52,8 @@ public class CartController extends BaseController {
 
 
         //redirect to main page
-        resp.sendRedirect(req.getContextPath() + "/");
+        String referrer = ((HttpServletRequest) req).getHeader("referer");
+        ((HttpServletResponse) resp).sendRedirect(referrer);
     }
 
     private void setContextVariables(Cart cart, String sessionID) {

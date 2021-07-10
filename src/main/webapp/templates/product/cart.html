@@ -65,8 +65,8 @@
                           </div>
                         </div>
                         <div class="col-md-4 quantity">
-                          <label for="quantity">Quantity:</label>
-                          <input id="quantity" type="number" onchange="() => {console.log('hello')}" name="quantity" th:value="${cart.getProductsWithQuantityList().get(prod)}" class="form-control quantity-input">
+                          <label th:attr="for='quantity' + ${prod.getId()}">Quantity:</label>
+                          <input type="number"  name="quantity" min="0" th:attr="id='quantity' + ${prod.getId()}, data-id=${prod.getId()}" th:value="${cart.getProductsWithQuantityList().get(prod)}" class="form-control quantity-input quantity-input-js">
                         </div>
                         <div class="col-md-3 price">
                             <span th:text="${cart.getProductTotal(prod)} + ' ' + ${prod.getDefaultCurrency()}"></span>
@@ -96,5 +96,6 @@
 
 <div th:replace="footer.html :: copy"></div>
 
+<script src="/static/js/script1.js" defer></script>
 </body>
 </html>
