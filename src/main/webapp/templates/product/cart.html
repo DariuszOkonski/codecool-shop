@@ -69,7 +69,7 @@
                           <input type="number"  name="quantity" min="0" th:attr="id='quantity' + ${prod.getId()}, data-id=${prod.getId()}" th:value="${cart.getProductsWithQuantityList().get(prod)}" class="form-control quantity-input quantity-input-js">
                         </div>
                         <div class="col-md-3 price">
-                            <span th:text="${cart.getProductTotal(prod)} + ' ' + ${prod.getDefaultCurrency()}"></span>
+                            <span th:attr="data-id=${prod.getId()}, data-price=${prod.getDefaultPrice()}, data-currency=${prod.getDefaultCurrency()}" th:text="${cart.getProductTotal(prod)} + ' ' + ${prod.getDefaultCurrency()}"></span>
                         </div>
                       </div>
                     </div>

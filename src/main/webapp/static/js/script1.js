@@ -25,5 +25,15 @@ function postQuantityValueChange(prodId, newQuantity) {
     })
         .then(response => response.json())
         .then(data => console.log(data));
+    updateSumForProduct(prodId, newQuantity);
 
+}
+
+function updateSumForProduct(prodId, newQuantity) {
+    const productSum = document.querySelector(`span[data-id="${prodId}"]`);
+    const price = productSum.dataset.price;
+    const currency = productSum.dataset.currency;
+    let newSum = price * newQuantity;
+    productSum.innerText = `${newSum.toFixed(2)} ${currency}`;
+    console.log(`${newSum} ${currency}`);
 }
