@@ -24,8 +24,9 @@ function postQuantityValueChange(prodId, newQuantity) {
         body: JSON.stringify(data),
     })
         .then(response => response.json())
-        .then(data => console.log(data));
+        .then(() => console.log(data, "we expect object"));
     updateSumForProduct(prodId, newQuantity);
+    updateTotal();
 
 }
 
@@ -37,3 +38,22 @@ function updateSumForProduct(prodId, newQuantity) {
     productSum.innerText = `${newSum.toFixed(2)} ${currency}`;
     console.log(`${newSum} ${currency}`);
 }
+
+function updateTotal() {
+    const totalElement = document.querySelector("div.summary-item > span.price");
+    const priceElements =  document.querySelectorAll("div.price > span");
+    let newTotal = 0;
+    console.log(totalElement.innerText);
+    let currency = totalElement.innerText.split(" ")[1];
+    console.log(currency);
+
+    for (let prices of priceElements) {
+     newTotal += parseFloat(prices.innerText.split(" ")[0]);
+    }
+
+    totalElement.innerText = `${newTotal} ${currency}`;
+
+
+
+}
+
