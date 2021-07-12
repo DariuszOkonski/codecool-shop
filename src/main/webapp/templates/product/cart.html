@@ -26,6 +26,9 @@
   <!-- End of Bootstrap components -->
 
   <link rel="stylesheet" type="text/css" href="/static/css/custom.css" />
+  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p"
+        crossorigin="anonymous"/>
 </head>
 
 <body>
@@ -63,13 +66,14 @@
                             </div>
                           </div>
                         </div>
-                        <div class="col-md-4 quantity">
+                        <div class="col-md-3 quantity">
                           <label th:attr="for='quantity' + ${prod.getId()}">Quantity:</label>
                           <input type="number"  name="quantity" min="0" th:attr="id='quantity' + ${prod.getId()}, data-id=${prod.getId()}" th:value="${cart.getProductsWithQuantityList().get(prod)}" class="form-control quantity-input quantity-input-js">
                         </div>
                         <div class="col-md-3 price">
                             <span th:attr="data-id=${prod.getId()}, data-price=${prod.getDefaultPrice()}, data-currency=${prod.getDefaultCurrency()}" th:text="${cart.getProductTotal(prod)} + ' ' + ${prod.getDefaultCurrency()}"></span>
                         </div>
+                        <div class="col-md-1 d-flex flex-column justify-content-center removeButton" style="font-size: 30px; color: crimson"><i class="far fa-times-circle"></i></div>
                       </div>
                     </div>
                   </div>
