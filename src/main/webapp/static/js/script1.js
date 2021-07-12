@@ -1,5 +1,4 @@
 const increasingInputs = document.querySelectorAll(".quantity-input-js");
-
 console.log(increasingInputs, " ALE ZMIENIONE!!!")
 
 function setEventListeners(){
@@ -9,6 +8,10 @@ function setEventListeners(){
             postQuantityValueChange(input.dataset.id, input.value)
         })
     )
+}
+
+function setDeleteCartItemListener() {
+
 }
 
 setEventListeners();
@@ -30,6 +33,12 @@ function postQuantityValueChange(prodId, newQuantity) {
 
 }
 
+function _api_delete (url, callback) {
+    fetch(url, {
+        method: 'DELETE'
+    }).then(callback)
+}
+
 function updateSumForProduct(prodId, newQuantity) {
     const productSum = document.querySelector(`span[data-id="${prodId}"]`);
     const price = productSum.dataset.price;
@@ -44,14 +53,14 @@ function updateTotal() {
     const priceElements =  document.querySelectorAll("div.price > span");
     let newTotal = 0;
     console.log(totalElement.innerText);
-    let currency = totalElement.innerText.split(" ")[1];
-    console.log(currency);
+    // let currency = totalElement.innerText.split(" ")[1];
+    // console.log(currency);
 
     for (let prices of priceElements) {
      newTotal += parseFloat(prices.innerText.split(" ")[0]);
     }
 
-    totalElement.innerText = `${newTotal} ${currency}`;
+    totalElement.innerText = `${newTotal.toFixed(2)}`;
 
 
 

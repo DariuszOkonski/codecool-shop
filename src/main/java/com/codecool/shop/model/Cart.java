@@ -63,4 +63,8 @@ public class Cart extends BaseModel {
         this.productsWithQuantityList.put(product, quantity);
 
     }
+
+    public void removeProduct(Product prod) {
+        productsWithQuantityList.remove(prod);
+    }
 }

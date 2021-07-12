@@ -73,7 +73,11 @@
                         <div class="col-md-3 price">
                             <span th:attr="data-id=${prod.getId()}, data-price=${prod.getDefaultPrice()}, data-currency=${prod.getDefaultCurrency()}" th:text="${cart.getProductTotal(prod)} + ' ' + ${prod.getDefaultCurrency()}"></span>
                         </div>
-                        <div class="col-md-1 d-flex flex-column justify-content-center removeButton" style="font-size: 30px; color: crimson"><i class="far fa-times-circle"></i></div>
+                        <div class="col-md-1 d-flex flex-column justify-content-center removeButton" >
+                          <a th:href="@{/delete-item(product_id=${prod.getId()})}">
+                            <i class="far fa-times-circle" style="font-size: 30px; color: crimson"></i>
+                          </a>
+                        </div>
                       </div>
                     </div>
                   </div>
