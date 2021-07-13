@@ -10,9 +10,10 @@ public class Order extends BaseModel {
     private String orderNumber;
     private String customerAddress;
     private String customerName;
-    private String email;
-    private Cart customerCart;
 
+    private String email;
+
+    private Cart customerCart;
     public Order(String orderNumber, String customerAddress, String customerName, String email, Cart customerCart) {
         super(orderNumber + customerName, "transaction date: " + LocalDateTime.now().toString());
         this.orderNumber = orderNumber;
@@ -33,5 +34,9 @@ public class Order extends BaseModel {
 
     public String getOrderNumber() {
         return orderNumber;
+    }
+
+    public String getEmail() {
+        return email;
     }
 }
