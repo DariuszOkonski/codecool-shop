@@ -1,31 +1,37 @@
 package com.codecool.shop.model;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class Order extends BaseModel {
 
-    private boolean isPaymentSuccessful;
+    private boolean isPaymentSuccessfull;
+
+
     private String orderNumber;
     private String customerAddress;
     private String customerName;
+    private String email;
     private Cart customerCart;
 
-    public Order(String orderNumber, String customerAddress, String customerName, Cart customerCart) {
+    public Order(String orderNumber, String customerAddress, String customerName, String email, Cart customerCart) {
         super(orderNumber + customerName, "transaction date: " + LocalDateTime.now().toString());
         this.orderNumber = orderNumber;
         this.customerAddress = customerAddress;
         this.customerName = customerName;
+        this.email = email;
         this.customerCart = customerCart;
-        this.isPaymentSuccessful = true; // TODO: remove
+        this.isPaymentSuccessfull = false; // TODO: remove
     }
 
-    public boolean isPaymentSuccessful() {
-        return isPaymentSuccessful;
+    public boolean isPaymentSuccessfull() {
+        return isPaymentSuccessfull;
     }
 
-    public void setPaymentSuccessful(boolean paymentSuccessful) {
-        isPaymentSuccessful = paymentSuccessful;
+    public void setPaymentSuccessfull(boolean paymentSuccessfull) {
+        isPaymentSuccessfull = paymentSuccessfull;
+    }
+
+    public String getOrderNumber() {
+        return orderNumber;
     }
 }

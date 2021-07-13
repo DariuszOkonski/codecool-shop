@@ -7,7 +7,7 @@ public class EmailService implements MessageService{
     @Override
     public void sendMessage(Order order) {
         // payment NOT successful
-        if(!order.isPaymentSuccessful()) {
+        if(!order.isPaymentSuccessfull()) {
             // display page with payment refusal and error details, and possibility to return to basket or to main page
             // ??? send en email about refusal of the order - not in specification
             return;
