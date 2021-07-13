@@ -90,7 +90,9 @@
             <div class="summary">
               <h3>Summary</h3>
               <div class="summary-item"><span class="text">Total</span><span class="price" th:text="${cart.getSumPrice()}" >$0</span></div>
-              <button type="button" class="btn btn-primary btn-lg btn-block">Checkout</button>
+                <form th:action="@{/checkout}">
+                  <button type="submit" class="btn btn-primary btn-lg btn-block">Checkout</button>
+                </form>
             </div>
           </div>
         </div>
