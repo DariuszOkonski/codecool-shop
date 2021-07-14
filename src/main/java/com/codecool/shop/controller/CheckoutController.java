@@ -48,8 +48,7 @@ public class CheckoutController extends BaseController {
         customerData.setShippingAddressZipCode(req.getParameter("shipping-zip-code"));
 
         //redirect
-        String referrer = req.getHeader("referer");
-        resp.sendRedirect(referrer);
+        resp.sendRedirect("/payment");
 
     }
 

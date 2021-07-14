@@ -52,19 +52,19 @@
                             <div class="form-group">
                                 <label for="name">Name:</label>
                                 <input type="text" name="name" id="name" class="form-control" placeholder="John Doe"
-                                       aria-describedby="helpname">
+                                       aria-describedby="helpname" required>
                                 <small id="helpname" class="text-muted">Please type your name</small>
                             </div>
                             <div class="form-group">
                                     <label for="email">Email:</label>
                                     <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelpId"
-                                       placeholder="person@example.com">
+                                       placeholder="person@example.com" required>
                                     <small id="emailHelpId" class="form-text text-muted">Please type your email</small>
                             </div>
                             <div class="form-group">
                                 <label for="phone">Phone:</label>
-                                <input type="tel" class="form-control" name="phone" id="phone" aria-describedby="phoneHelpId"
-                                       placeholder="+48 555 000 555">
+                                <input type="text" class="form-control" name="phone" id="phone" aria-describedby="phoneHelpId"
+                                       placeholder="+48 555 000 555" required pattern="(\+?\d+\-?){3}">
                                 <small id="phoneHelpId" class="form-text text-muted">Please type your phone number</small>
                             </div>
                         </div>
@@ -72,29 +72,28 @@
                         <div class="mb-5">
                             <h3>Billing address:</h3>
                             <div class="form-group">
-                                <label for="name">Address:</label>
+                                <label for="billing-address">Address:</label>
                                 <input type="text" name="billing-address" id="billing-address" class="form-control" placeholder="Brazil St. 75"
-                                       aria-describedby="helpbillingaddress">
+                                       aria-describedby="helpbillingaddress" required>
                                 <small id="helpbillingaddress" class="text-muted">Please type your shipping address</small>
                             </div>
                             <div class="form-row">
                                 <div class="form-group mr-5">
-                                    <label for="name">Zip code:</label>
+                                    <label for="billing-zip-code">Zip code:</label>
                                     <input type="text" name="billing-zip-code" id="billing-zip-code" class="form-control" placeholder="00-999"
-                                           aria-describedby="helpbillingaddresszip">
+                                           aria-describedby="helpbillingaddresszip" required pattern="(\d\d-\d\d\d)">
                                     <small id="helpbillingaddresszip" class="text-muted">Please type your shipping address zip code</small>
                                 </div>
                                 <div class="form-group">
-                                    <label for="name">City:</label>
+                                    <label for="billing-city">City:</label>
                                     <input type="text" name="billing-city" id="billing-city" class="form-control" placeholder="Las Vegas"
-                                           aria-describedby="helpbillingcity">
+                                           aria-describedby="helpbillingcity" required>
                                     <small id="helpbillingcity" class="text-muted">Please type your shipping address city</small>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="country">Select country:</label>
-                                <select id="country" name="billing-country" class="form-control">
-                                    <span th:replace="product/countries.html :: countries_list"></span>
+                                <label for="billing-country">Select country:</label>
+                                <select id="billing-country" name="billing-country" class="form-control" required th:insert="product/countries.html :: countries_list">
                                 </select>
                             </div>
                         </div>
@@ -102,36 +101,35 @@
                         <div class="mb-5">
                             <h3>Shipping address:</h3>
                             <div class="form-group">
-                                <label for="name">Address:</label>
+                                <label for="shipping-address">Address:</label>
                                 <input type="text" name="shipping-address" id="shipping-address" class="form-control" placeholder="Brazil St. 75"
-                                       aria-describedby="helpshippingaddress">
+                                       aria-describedby="helpshippingaddress" required>
                                 <small id="helpshippingaddress" class="text-muted">Please type your shipping address</small>
                             </div>
                             <div class="form-row">
                             <div class="form-group mr-5">
-                                <label for="name">Zip code:</label>
+                                <label for="shipping-zip-code">Zip code:</label>
                                 <input type="text" name="shipping-zip-code" id="shipping-zip-code" class="form-control" placeholder="00-999"
-                                       aria-describedby="helpshippingaddresszip">
+                                       aria-describedby="helpshippingaddresszip" required pattern="(\d\d-\d\d\d)">
                                 <small id="helpshippingaddresszip" class="text-muted">Please type your shipping address zip code</small>
                             </div>
                             <div class="form-group">
-                                <label for="name">City:</label>
+                                <label for="shipping-city">City:</label>
                                 <input type="text" name="shipping-city" id="shipping-city" class="form-control" placeholder="Las Vegas"
-                                       aria-describedby="helpshippingcity">
+                                       aria-describedby="helpshippingcity" required>
                                 <small id="helpshippingcity" class="text-muted">Please type your shipping address city</small>
                             </div>
                             </div>
                             <div class="form-group">
                                 <label for="country">Select country:</label>
-                                <select id="country" name="shipping-country" class="form-control">
-                                    <span th:replace="product/countries.html :: countries_list"></span>
+                                <select id="country" name="shipping-country" class="form-control" required th:insert="product/countries.html :: countries_list">
                                 </select>
                             </div>
                         </div>
 
                         </form>
 
-                        </div>
+                    </div>
                     <div class="col-md-12 col-lg-4">
                         <div class="summary">
                             <div class="sticky">
@@ -142,9 +140,9 @@
                         </div>
                     </div>
                 </div>
+            </div>
         </div>
     </section>
-
 
 </div>
 
