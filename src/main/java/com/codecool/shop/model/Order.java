@@ -5,8 +5,6 @@ import java.time.LocalDateTime;
 public class Order extends BaseModel {
 
     private boolean isPaymentSuccessfull;
-
-
     private String orderNumber;
     private String customerAddress;
     private String customerName;
