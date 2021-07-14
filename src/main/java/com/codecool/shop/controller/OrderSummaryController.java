@@ -3,6 +3,7 @@ package com.codecool.shop.controller;
 import com.codecool.shop.model.Order;
 import com.codecool.shop.service.*;
 
+import javax.mail.MessagingException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,9 +29,17 @@ public class OrderSummaryController extends BaseController {
         if(order == null) {
             sendErrorOrder(resp);
         }else if(!order.isPaymentSuccessfull()) {
-            sendFailedOrder(resp);
+            try {
+                sendFailedOrder(resp);
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
         } else {
-            sendSuccessfulOrder(resp);
+            try {
+                sendSuccessfulOrder(resp);
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
         }
 
     }
@@ -44,7 +53,7 @@ public class OrderSummaryController extends BaseController {
         engine.process("product/orderSummary.html", context, resp.getWriter());
     }
 
-    private void sendFailedOrder(HttpServletResponse resp) throws IOException {
+    private void sendFailedOrder(HttpServletResponse resp) throws IOException, MessagingException {
         System.out.println("--- ORDER DENIED ---");
         String status = "ORDER DENIED";
         String message = "No Payment has been made";
@@ -59,7 +68,7 @@ public class OrderSummaryController extends BaseController {
         engine.process("product/orderSummary.html", context, resp.getWriter());
     }
 
-    private void sendSuccessfulOrder(HttpServletResponse resp) throws IOException {
+    private void sendSuccessfulOrder(HttpServletResponse resp) throws IOException, MessagingException {
         System.out.println("--- ORDER SUCCESSFULL ---");
         String status = "ORDER ACCEPTED";
         String message = "Payment has been successfull";
