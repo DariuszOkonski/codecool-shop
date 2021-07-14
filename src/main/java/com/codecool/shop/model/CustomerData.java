@@ -13,22 +13,8 @@ public class CustomerData extends BaseModel {
     private String shippingAddressCity;
     private String shippingAddressZipCode;
 
-    public CustomerData(String id, String customerName, String customerEmail, String customerPhoneNumber,
-                        String billingAddress, String billingAddressCountry, String billingAddressCity,
-                        String billingAddressZipCode, String shippingAddress, String shippingAddressCountry,
-                        String shippingAddressCity, String shippingAddressZipCode) {
+    public CustomerData(String id) {
         super(id);
-        this.customerName = customerName;
-        this.customerEmail = customerEmail;
-        this.customerPhoneNumber = customerPhoneNumber;
-        this.billingAddress = billingAddress;
-        this.billingAddressCountry = billingAddressCountry;
-        this.billingAddressCity = billingAddressCity;
-        this.billingAddressZipCode = billingAddressZipCode;
-        this.shippingAddress = shippingAddress;
-        this.shippingAddressCountry = shippingAddressCountry;
-        this.shippingAddressCity = shippingAddressCity;
-        this.shippingAddressZipCode = shippingAddressZipCode;
     }
 
     public String getCustomerName() {
