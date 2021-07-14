@@ -23,8 +23,7 @@ public class OrderSummaryController extends BaseController {
         order = new Order("1101/01/2021", "gliwice", "companyABC", "darek200180@gmail.com", null);
         emailService = new EmailService();
         jsonService = new JSONService();
-        order.setPaymentSuccessfull(false);
-        order = null;
+        order.setPaymentSuccessfull(true);
 
         if(order == null) {
             sendErrorOrder(resp);
