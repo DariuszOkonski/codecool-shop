@@ -1,17 +1,17 @@
-package com.codecool.shop.model;
+package com.codecool.shop.model.payment;
+
+import com.codecool.shop.model.BaseModel;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class Payment extends BaseModel{
+public abstract class Payment extends BaseModel implements PaymentMethod{
     private boolean finished;
     private BigDecimal amountToPay;
-    private PaymentMethods method;
 
-    public Payment(BigDecimal amountToPay, String userSessionId, PaymentMethods paymentMethod) {
+    public Payment(BigDecimal amountToPay, String userSessionId) {
         super(userSessionId);
         this.amountToPay = amountToPay;
-        this.method = paymentMethod;
     }
 
     public boolean isFinished() {
@@ -22,7 +22,4 @@ public class Payment extends BaseModel{
         this.finished = finished;
     }
 
-    public String getTitleForTranser(){
-        return getName() + LocalDateTime.now().toString();
-    }
 }

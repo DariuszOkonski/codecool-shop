@@ -34,22 +34,23 @@
     <header th:replace="header.html :: header"></header>
 
     <div class="container">
-      <h2>Select payment method:</h2>
+      <h2>Payment method: </h2>
       <div class="flex-column p-2" role="group">
+        <form method="get">
 
-        <div th:each="payMethod,iterStat : ${paymentMethods}">
+            <div th:each="payMethod,iterStat : ${paymentMethods}" class="form-check mb-2">
+              <input class="form-check-input" type="radio" name="method" id="exampleRadios1" th:id="${payMethod.getUrlString()}" th:value="${payMethod.getUrlString()}">
+              <label class="form-check-label" for="exampleRadios1"
+                     th:text="${payMethod.friendlyName}"
+                     th:attr="for=${payMethod.getUrlString()}">
+                Default radio
+              </label>
+            </div>
+          <button type="submit" id="payment-submit" class="btn btn-primary mt-2">
+            Continue
+          </button>
+        </form>
 
-          <div class="form-check mb-2">
-            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1"
-                   th:attr="id=${payMethod.friendlyName}">
-            <label class="form-check-label" for="exampleRadios1"
-                   th:text="${payMethod.friendlyName}"
-                   th:attr="for=${payMethod.friendlyName}">
-              Default radio
-            </label>
-          </div>
-        </div>
-      <button class="btn btn-primary mt-2">Continue</button>
       </div>
     </div>
 

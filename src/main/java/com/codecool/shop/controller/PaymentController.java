@@ -1,7 +1,6 @@
 package com.codecool.shop.controller;
 
-import com.codecool.shop.model.Cart;
-import com.codecool.shop.model.PaymentMethods;
+import com.codecool.shop.model.payment.PaymentMethods;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,9 +17,12 @@ public class PaymentController extends BaseController{
         setTemplateContext(req, resp);
         serviceSessionValidation(req);
 
+
         String currentSession = req.getSession().getId();
         BigDecimal amountToPay = cartDataStore.getByName(currentSession).getSumPrice();
-        setContextVariables(currentSession, amountToPay);
+
+        String chosenPaymentMethod = req.getParameter("payment-method");
+        setContextVariables(currentSession, amountToPay, chosenPaymentMethod);
 
         engine.process("product/payment.html", context, resp.getWriter());
     }
@@ -35,10 +37,17 @@ public class PaymentController extends BaseController{
         ((HttpServletResponse) resp).sendRedirect(referrer);
     }
 
-    private void setContextVariables(String sessionID, BigDecimal cartSumPrice) {
+    private void setContextVariables(String sessionID, BigDecimal cartSumPrice, String chosenPaymentMethod) {
         // TODO: check if refactorable
         context.setVariable("userId", sessionID);
         context.setVariable("amountToPay", cartSumPrice);
-        context.setVariable("paymentMethods", PaymentMethods.values());
+        System.out.println("KURWA MAC " + chosenPaymentMethod);
+        if (chosenPaymentMethod == null) {
+            for (PaymentMethods method : PaymentMethods.values()){
+                System.out.println(method.url + " LIRWAAFSDA");
+            }
+            context.setVariable("paymentMethods", PaymentMethods.values());
+        }else
+            context.setVariable("chosenPaymentMethod", chosenPaymentMethod);
     }
 }
