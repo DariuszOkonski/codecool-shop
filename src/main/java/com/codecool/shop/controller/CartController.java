@@ -40,7 +40,7 @@ public class CartController extends BaseController {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //add to cart
-
+        serviceSessionValidation(req);
         int productId = Integer.parseInt(req.getParameter("product_id"));
         int quantity = Integer.parseInt(req.getParameter("quantity"));
 

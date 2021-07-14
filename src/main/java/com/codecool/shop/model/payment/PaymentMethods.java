@@ -3,39 +3,58 @@ package com.codecool.shop.model.payment;
 import java.math.BigDecimal;
 
 public enum PaymentMethods {
-    CREDIT_CARD("Credit card"),
-    PAY_PAL("PayPal"),
-    TRANSFER("Regular transfer");
+    CREDIT_CARD("credit-card"),
+    PAY_PAL("paypal"),
+    TRANSFER("transfer");
 
-    public final String friendlyName;
-    public String url;
-    PaymentMethods(String friendlyName) {
-        this.friendlyName = friendlyName;
+    public String friendlyName;
+
+
+    public final String url;
+    PaymentMethods(String url) {
+        this.url = url;
     }
 
-    public PaymentMethod build(BigDecimal amountToPay, String userSessionId){
-        switch(this) {
-            case CREDIT_CARD:
+    public static PaymentMethod build(String url, BigDecimal amountToPay, String userSessionId){
+        switch(url) {
+            case "credit-card":
                 return new CreditCardPayment(amountToPay, userSessionId);
-            case TRANSFER:
+            case "transfer":
                 return new TransferPayment(amountToPay, userSessionId);
-            case PAY_PAL:
+            case "paypal":
                 return new PayPalPayment(amountToPay, userSessionId);
             default:
                 return null;
         }
     }
-    public String getUrlString(){
-        switch(this) {
-            case CREDIT_CARD:
-                return "credit-card";
-            case PAY_PAL:
-                return "paypal";
-            case TRANSFER:
-                return "transfer";
+    public String getUrl(){
+        return url;
+    }
+
+    public static PaymentMethods valueOfUrl(String url){
+        switch(url) {
+            case "credit-card":
+                return CREDIT_CARD;
+            case "transfer":
+                return TRANSFER;
+            case "paypal":
+                return PAY_PAL;
             default:
-                return "";
+                return null;
         }
     }
+    public String getFriendlyName(){
+        switch(this) {
+            case CREDIT_CARD:
+                return "Credit card";
+            case TRANSFER:
+                return "Regular transfer";
+            case  PAY_PAL:
+                return "PayPal";
+            default:
+                return null;
+        }
+    }
+
 
 }

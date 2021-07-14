@@ -39,10 +39,10 @@
         <form method="get">
 
             <div th:each="payMethod,iterStat : ${paymentMethods}" class="form-check mb-2">
-              <input class="form-check-input" type="radio" name="method" id="exampleRadios1" th:id="${payMethod.getUrlString()}" th:value="${payMethod.getUrlString()}">
+              <input class="form-check-input" type="radio" name="method" id="exampleRadios1" th:id="${payMethod.getUrl()}" th:value="${payMethod.getUrl()}">
               <label class="form-check-label" for="exampleRadios1"
-                     th:text="${payMethod.friendlyName}"
-                     th:attr="for=${payMethod.getUrlString()}">
+                     th:text="${payMethod.getFriendlyName()}"
+                     th:attr="for=${payMethod.getUrl()}">
                 Default radio
               </label>
             </div>
