@@ -71,10 +71,13 @@ public class PaymentController extends BaseController{
         CreditCard card = new CreditCard(cardNumber, expYear, expMonth, cvv);
         if (card.isDataCorrect() && card.fundsEnoughFor(ord.getCustomerCart().getSumPrice())) {
             ord.setPaymentSuccessfull(true);
+
             //redirect to main page
         } else {
             ord.setPaymentSuccessfull(false);
         }
+        // TODO MOVE FROM SESSION ID BASED PROCESSING TO SETTING ORDER ID IN SESSION
+        req.getSession().setAttribute("processed_order", ord.getId());
         resp.sendRedirect(String.format("/order-summary?order_id=%s", ord.getId()));
     }
 

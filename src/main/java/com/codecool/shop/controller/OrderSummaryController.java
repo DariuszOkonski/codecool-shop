@@ -21,7 +21,8 @@ public class OrderSummaryController extends BaseController {
         serviceSessionValidation(req);
         // TODO: object Order is Given here by POST request
 //        order = new Order("gliwice", "companyABC", "darek200180@gmail.com", null);
-
+        System.out.println(req.getSession().getAttribute("processed_order") + " PRCESSD ORDER ");
+        // TODO MOVE FROM SESSION ID BASED PROCESSING TO SETTING ORDER ID IN SESSION
         int orderId = Integer.parseInt(req.getParameter("order_id"));
         order = orderDataStore.find(orderId);
 
