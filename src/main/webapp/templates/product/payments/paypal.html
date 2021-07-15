@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:data="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="utf-8" />
   <meta name="author" content="Codecool" />
@@ -27,6 +28,7 @@
 
 
   <link rel="stylesheet" type="text/css" href="/static/css/custom.css" />
+  <script src="https://www.paypal.com/sdk/js?client-id=AZvT1TTeUJD2h1o3tUnhdRAz1umBlPLNdyURWvUEuHEsB_A0AdyS8KgTAbmDn-U460WEMq3GWEIaAE0v"></script>
 </head>
 
 <body>
@@ -34,26 +36,14 @@
 <header th:replace="header.html :: header"></header>
 
 <div class="container">
-  <h2>Payment method: </h2>
+  <h2>Paying with PayPal</h2>
+
   <div class="flex-column p-2" role="group">
-<!--    <form method="get">-->
-
-<!--      <div th:each="payMethod,iterStat : ${paymentMethods}" class="form-check mb-2">-->
-<!--        <input class="form-check-input" type="radio" name="method" id="exampleRadios1" th:id="${payMethod.getUrlString()}" th:value="${payMethod.getUrlString()}">-->
-<!--        <label class="form-check-label" for="exampleRadios1"-->
-<!--               th:text="${payMethod.friendlyName}"-->
-<!--               th:attr="for=${payMethod.getUrlString()}">-->
-<!--          Default radio-->
-<!--        </label>-->
-<!--      </div>-->
-<!--      <button type="submit" id="payment-submit" class="btn btn-primary mt-2">-->
-<!--        Continue-->
-<!--      </button>-->
-<!--    </form>-->
-    <h1>PayPal</h1>
-
+    <div id="order_id" style="display:none" th:attr="data-orderId=${ord_id}"></div>
+    <div id="paypal-button-container"></div>
   </div>
 </div>
-
+<script src="/static/js/payment.js"></script>
 </body>
+
 </html>

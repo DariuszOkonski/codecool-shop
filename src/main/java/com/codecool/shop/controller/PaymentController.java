@@ -31,7 +31,7 @@ public class PaymentController extends BaseController{
         } else {
             orderMock = orderDataStore.getByName(currentSession);
         }
-
+        req.getSession().setAttribute("processed_order", orderMock.getId());
         BigDecimal amountToPay = currentCart.getSumPrice();
 
         String chosenPaymentMethod = req.getParameter("method");
@@ -39,7 +39,7 @@ public class PaymentController extends BaseController{
             PaymentMethod paymentMethod = PaymentMethods.build(chosenPaymentMethod, BigDecimal.ONE, currentSession);
             orderMock.setPayment(paymentMethod);
         }
-        setContextVariables(currentSession, amountToPay, chosenPaymentMethod);
+        setContextVariables(currentSession, amountToPay, chosenPaymentMethod, orderMock.getId());
 
 
         engine.process(getPaymentMethodTemplate(chosenPaymentMethod), context, resp.getWriter());
@@ -81,10 +81,15 @@ public class PaymentController extends BaseController{
         resp.sendRedirect(String.format("/order-summary?order_id=%s", ord.getId()));
     }
 
-    private void setContextVariables(String sessionID, BigDecimal cartSumPrice, String chosenPaymentMethod) {
+    private void servicePayPalPayment(HttpServletRequest req, HttpServletResponse resp) throws IOException{
+
+    }
+
+    private void setContextVariables(String sessionID, BigDecimal cartSumPrice, String chosenPaymentMethod, int orderId) {
         // TODO: check if refactorable
         context.setVariable("userId", sessionID);
         context.setVariable("amountToPay", cartSumPrice);
+        context.setVariable("ord_id", orderId);
         if (chosenPaymentMethod == null) {
             context.setVariable("paymentMethods", PaymentMethods.values());
         }
