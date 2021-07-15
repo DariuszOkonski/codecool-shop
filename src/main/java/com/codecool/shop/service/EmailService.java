@@ -35,11 +35,10 @@ public class EmailService implements MessageService{
 //
 
         java_gmail_attempt();
-//        firstAttempt();
 
     }
 
-    private void anotherOne() {
+    private void another1() {
         String to = "darek200180@gmail.com";//change accordingly
 
         // Sender's email ID needs to be mentioned
@@ -96,20 +95,7 @@ public class EmailService implements MessageService{
 
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    private void another() {
+    private void another2() {
 
         // Recipient's email ID needs to be mentioned.
         String to = "darek200180@gmail.com";//change accordingly
@@ -210,7 +196,7 @@ public class EmailService implements MessageService{
         }
     }
 
-    private void firstAttempt() throws MessagingException {
+    private void another3() throws MessagingException {
         System.out.println("=== configuration success");
         // configuration
         Properties prop = new Properties();
@@ -253,6 +239,6 @@ public class EmailService implements MessageService{
 
         message.setContent(multipart);
 
-//        Transport.send(message);
+        Transport.send(message);
     }
 }
