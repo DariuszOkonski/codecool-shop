@@ -4,6 +4,7 @@ import com.codecool.shop.model.Cart;
 import com.codecool.shop.model.payment.CreditCard;
 import com.codecool.shop.model.payment.PaymentMethod;
 import com.codecool.shop.model.payment.PaymentMethods;
+import com.codecool.shop.model.Order;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
+
 
 @WebServlet(urlPatterns = {"/payment"})
 public class PaymentController extends BaseController{

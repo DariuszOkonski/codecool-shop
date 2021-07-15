@@ -1,5 +1,6 @@
 package com.codecool.shop.controller;
 
+import com.codecool.shop.model.Order;
 import com.codecool.shop.service.*;
 
 import javax.mail.MessagingException;
@@ -20,7 +21,7 @@ public class OrderSummaryController extends BaseController {
         serviceSessionValidation(req);
 
         // TODO: object Order is Given here by POST request
-        order = new Order("1101/01/2021", "gliwice", "companyABC", "darek200180@gmail.com", null);
+        order = new Order("gliwice", "companyABC", "darek200180@gmail.com", null);
         emailService = new EmailService();
         jsonService = new JSONService();
         order.setPaymentSuccessfull(true);
@@ -56,7 +57,7 @@ public class OrderSummaryController extends BaseController {
         System.out.println("--- ORDER DENIED ---");
         String status = "ORDER DENIED";
         String message = "No Payment has been made";
-        String orderNumber = order.getOrderNumber();
+        String orderNumber = order.getCustomerName();
         String email = order.getEmail();
 
         // ??? send en email about refusal of the order - not in specification
@@ -71,7 +72,7 @@ public class OrderSummaryController extends BaseController {
         System.out.println("--- ORDER SUCCESSFULL ---");
         String status = "ORDER ACCEPTED";
         String message = "Payment has been successfull";
-        String orderNumber = order.getOrderNumber();
+        String orderNumber = order.getCustomerName();
         String email = order.getEmail();
 
         // if ok, save order to json file
