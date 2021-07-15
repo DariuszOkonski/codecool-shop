@@ -1,6 +1,7 @@
 package com.codecool.shop.controller;
 
 import com.codecool.shop.model.Cart;
+import com.codecool.shop.model.CustomerData;
 import com.codecool.shop.model.payment.CreditCard;
 import com.codecool.shop.model.payment.PaymentMethod;
 import com.codecool.shop.model.payment.PaymentMethods;
@@ -23,10 +24,11 @@ public class PaymentController extends BaseController{
 
         String currentSession = req.getSession().getId();
         Cart currentCart = cartDataStore.getByName(currentSession);
+        CustomerData customerData = customerDataStore.getByName(currentSession);
 
         Order orderMock = null;
         if (orderDataStore.getByName(currentSession) == null){
-            orderMock = new Order("Krakow", currentSession, "asd@asd", currentCart);
+            orderMock = new Order(customerData, currentCart);
             orderDataStore.add(orderMock);
         } else {
             orderMock = orderDataStore.getByName(currentSession);

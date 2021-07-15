@@ -14,13 +14,12 @@ public class Order extends BaseModel {
     private String email;
     private PaymentMethod payment;
     private Cart customerCart;
+    private CustomerData customerData;
 
 
-    public Order(String customerAddress, String customerName, String email, Cart customerCart) {
-        super(customerName, "transaction date: " + LocalDateTime.now().toString());
-        this.customerAddress = customerAddress;
-        this.customerName = customerName;
-        this.email = email;
+    public Order(CustomerData customerData, Cart customerCart) {
+        super(customerData.getName(), "transaction date: " + LocalDateTime.now().toString());
+        this.customerData = customerData;
         this.customerCart = customerCart;
         this.isPaymentSuccessfull = false; // TODO: remove
     }
@@ -39,11 +38,19 @@ public class Order extends BaseModel {
 //    }
 
     public String getCustomerName() {
-        return customerName;
+        return customerData.getName();
     }
 
     public String getEmail() {
-        return email;
+        return customerData.getCustomerEmail();
+    }
+
+    public CustomerData getCustomerData() {
+        return customerData;
+    }
+
+    public void setCustomerData(CustomerData customerData) {
+        this.customerData = customerData;
     }
 
     public PaymentMethod getPayment() {
