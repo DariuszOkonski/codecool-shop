@@ -34,7 +34,7 @@ public class EmailService implements MessageService{
 //        System.out.println("to: " + incomingEmail);
 //
 
-        java_gmail_attempt();
+//        java_gmail_attempt();
 
     }
 
