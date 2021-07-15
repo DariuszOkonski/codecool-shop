@@ -1,9 +1,7 @@
 package com.codecool.shop.controller;
 
 import com.codecool.shop.model.Cart;
-import com.codecool.shop.model.Order;
 import com.codecool.shop.model.payment.CreditCard;
-import com.codecool.shop.model.payment.CreditCardPayment;
 import com.codecool.shop.model.payment.PaymentMethod;
 import com.codecool.shop.model.payment.PaymentMethods;
 
