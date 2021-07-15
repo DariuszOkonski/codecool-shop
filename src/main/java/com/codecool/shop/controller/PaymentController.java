@@ -21,9 +21,9 @@ public class PaymentController extends BaseController{
         setTemplateContext(req, resp);
         serviceSessionValidation(req);
 
-
         String currentSession = req.getSession().getId();
         Cart currentCart = cartDataStore.getByName(currentSession);
+
         Order orderMock = null;
         if (orderDataStore.getByName(currentSession) == null){
             orderMock = new Order("Krakow", currentSession, "asd@asd", currentCart);
@@ -49,7 +49,7 @@ public class PaymentController extends BaseController{
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         switch (PaymentMethods.valueOfUrl(req.getParameter("method"))) {
             case CREDIT_CARD:
-                serviceCreditCardPayment(req);
+                serviceCreditCardPayment(req, resp);
             case TRANSFER:
 //                serviceCreditCardPayment(req);
             case PAY_PAL:
@@ -57,12 +57,11 @@ public class PaymentController extends BaseController{
             default:
 
         }
-        resp.sendRedirect("/");
         //redirect to result page
 
     }
 
-    private void serviceCreditCardPayment(HttpServletRequest req) {
+    private void serviceCreditCardPayment(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String cardNumber = req.getParameter("cardNumberInput");
         String expYear = req.getParameter("expirationYear");
         String expMonth = req.getParameter("expirationMonth");
@@ -71,11 +70,12 @@ public class PaymentController extends BaseController{
         Order ord = orderDataStore.getByName(req.getSession().getId());
         CreditCard card = new CreditCard(cardNumber, expYear, expMonth, cvv);
         if (card.isDataCorrect() && card.fundsEnoughFor(ord.getCustomerCart().getSumPrice())) {
-            ord.getPayment().setFinished(true);
-            System.out.println("Transaction succedeed");
+            ord.setPaymentSuccessfull(true);
+            //redirect to main page
         } else {
-            System.out.println("Transaction failed");
+            ord.setPaymentSuccessfull(false);
         }
+        resp.sendRedirect(String.format("/order-summary?order_id=%s", ord.getId()));
     }
 
     private void setContextVariables(String sessionID, BigDecimal cartSumPrice, String chosenPaymentMethod) {
