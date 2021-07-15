@@ -67,4 +67,11 @@ public class Cart extends BaseModel {
     public void removeProduct(Product prod) {
         productsWithQuantityList.remove(prod);
     }
+
+    public String getSumPriceJson(){
+
+            return "{" +
+                    '"' + "order" + '"' + ":" + '"' + getSumPrice() + '"'+
+                    '}';
+    }
 }

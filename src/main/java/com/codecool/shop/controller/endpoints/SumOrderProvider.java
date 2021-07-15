@@ -3,6 +3,7 @@ package com.codecool.shop.controller.endpoints;
 import com.codecool.shop.controller.BaseController;
 import com.codecool.shop.model.Cart;
 import com.codecool.shop.model.Order;
+import com.codecool.shop.model.OrderModel;
 import com.codecool.shop.model.payment.CreditCard;
 import com.codecool.shop.model.payment.PaymentMethod;
 import com.codecool.shop.model.payment.PaymentMethods;
@@ -24,23 +25,8 @@ public class SumOrderProvider extends BaseController{
             setTemplateContext(req, resp);
             serviceSessionValidation(req);
 
-            class mock {
-                BigDecimal order = orderDataStore.find(Integer.parseInt(req.getParameter("order-id")))
-                        .getCustomerCart()
-                        .getSumPrice();
-
-                public mock() {
-                }
-
-                @Override
-                public String toString() {
-                    return "{" +
-                            "\"order\":" + "\"" + order +"\""+
-                            '}';
-                }
-            }
-            mock kruwa = new mock();
-            String employeeJsonString = kruwa.toString();
+            OrderModel sumPriceJson = new OrderModel(cartDataStore.getByName(req.getSession().getId()));
+            String employeeJsonString = new Gson().toJson(sumPriceJson);
 
             PrintWriter out = resp.getWriter();
             resp.setContentType("application/json");

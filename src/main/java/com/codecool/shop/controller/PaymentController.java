@@ -41,7 +41,7 @@ public class PaymentController extends BaseController{
             PaymentMethod paymentMethod = PaymentMethods.build(chosenPaymentMethod, BigDecimal.ONE, currentSession);
             orderMock.setPayment(paymentMethod);
         }
-        setContextVariables(currentSession, amountToPay, chosenPaymentMethod, orderMock.getId());
+        setContextVariables(currentSession, amountToPay, chosenPaymentMethod, orderMock.getCustomerCart().getSumPrice());
 
 
         engine.process(getPaymentMethodTemplate(chosenPaymentMethod), context, resp.getWriter());
@@ -87,11 +87,11 @@ public class PaymentController extends BaseController{
 
     }
 
-    private void setContextVariables(String sessionID, BigDecimal cartSumPrice, String chosenPaymentMethod, int orderId) {
+    private void setContextVariables(String sessionID, BigDecimal cartSumPrice, String chosenPaymentMethod, BigDecimal sumToPay) {
         // TODO: check if refactorable
         context.setVariable("userId", sessionID);
         context.setVariable("amountToPay", cartSumPrice);
-        context.setVariable("ord_id", orderId);
+        context.setVariable("sumToPay", sumToPay);
         if (chosenPaymentMethod == null) {
             context.setVariable("paymentMethods", PaymentMethods.values());
         }
