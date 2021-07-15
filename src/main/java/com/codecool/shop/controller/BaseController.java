@@ -18,6 +18,8 @@ public abstract class BaseController extends HttpServlet {
     protected ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
     protected SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
     protected CartDao cartDataStore = CartDaoMem.getInstance();
+    protected OrderDao orderDataStore = OrderDaoMem.getInstance();
+
     protected ProductService productService = new ProductService(productDataStore,productCategoryDataStore, supplierDataStore);
     protected CustomerDataDao customerDataStore = CustomerDataDaoMem.getInstance();
     protected TemplateEngine engine = null;

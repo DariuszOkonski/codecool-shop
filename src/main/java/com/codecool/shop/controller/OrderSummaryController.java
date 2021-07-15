@@ -16,15 +16,18 @@ public class OrderSummaryController extends BaseController {
     private ReportService jsonService = null;
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         setTemplateContext(req, resp);
         serviceSessionValidation(req);
-
         // TODO: object Order is Given here by POST request
-        order = new Order("1101/01/2021", "gliwice", "companyABC", "darek200180@gmail.com", null);
+//        order = new Order("gliwice", "companyABC", "darek200180@gmail.com", null);
+        System.out.println(req.getSession().getAttribute("processed_order") + " PRCESSD ORDER ");
+        // TODO MOVE FROM SESSION ID BASED PROCESSING TO SETTING ORDER ID IN SESSION
+        int orderId = Integer.parseInt(req.getParameter("order_id"));
+        order = orderDataStore.find(orderId);
+
         emailService = new EmailService();
         jsonService = new JSONService();
-        order.setPaymentSuccessfull(true);
 
         if(order == null) {
             sendErrorOrder(resp);
@@ -57,7 +60,7 @@ public class OrderSummaryController extends BaseController {
         System.out.println("--- ORDER DENIED ---");
         String status = "ORDER DENIED";
         String message = "No Payment has been made";
-        String orderNumber = order.getOrderNumber();
+        String orderNumber = order.getCustomerName();
         String email = order.getEmail();
 
         // ??? send en email about refusal of the order - not in specification
@@ -72,7 +75,7 @@ public class OrderSummaryController extends BaseController {
         System.out.println("--- ORDER SUCCESSFULL ---");
         String status = "ORDER ACCEPTED";
         String message = "Payment has been successfull";
-        String orderNumber = order.getOrderNumber();
+        String orderNumber = order.getCustomerName();
         String email = order.getEmail();
 
         // if ok, save order to json file
