@@ -34,6 +34,10 @@ public class Order extends BaseModel {
         payment.setFinished(paymentSuccessfull);
     }
 
+    public void setPaymentSuccessfull() {
+        isPaymentSuccessfull = true;
+    }
+
 //    public String getOrderNumber() {
 //        return orderNumber;
 //    }
