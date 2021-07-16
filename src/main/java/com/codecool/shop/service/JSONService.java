@@ -1,12 +1,19 @@
 package com.codecool.shop.service;
 
 import com.codecool.shop.model.Order;
+import com.google.gson.Gson;
 
 public class JSONService implements ReportService {
     @Override
-    public void saveData(Order order) {
-        // logic to save order to json file
-        System.out.println("SAVING DATA TO JSON");
-        System.out.println("order nr: " + order.getCustomerName());
+    public String convertData(Order order) {
+        Gson json = new Gson();
+        String response = json.toJson(order);
+        return response;
     }
+
+//    public Order convertData(String jsonFormat) {
+//        Gson json = new Gson();
+//        Order order = json.fromJson(jsonFormat, Order.class);
+//        return order;
+//    }
 }

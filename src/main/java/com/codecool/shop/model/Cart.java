@@ -29,6 +29,7 @@ public class Cart extends BaseModel {
         }
     }
 
+
     public int getTotalProductCount() {
         int total = 0;
         for (int quantity: productsWithQuantityList.values()) {
@@ -68,10 +69,14 @@ public class Cart extends BaseModel {
         productsWithQuantityList.remove(prod);
     }
 
-    public String getSumPriceJson(){
+    public String getSumPriceJson() {
 
-            return "{" +
-                    '"' + "order" + '"' + ":" + '"' + getSumPrice() + '"'+
-                    '}';
+        return "{" +
+                '"' + "order" + '"' + ":" + '"' + getSumPrice() + '"' +
+                '}';
+    }
+
+    public void cleanCart() {
+        productsWithQuantityList = new HashMap<>();
     }
 }

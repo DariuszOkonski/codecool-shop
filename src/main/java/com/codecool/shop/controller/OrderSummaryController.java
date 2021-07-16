@@ -14,20 +14,25 @@ public class OrderSummaryController extends BaseController {
     private Order order = null;
     private MessageService emailService = null;
     private ReportService jsonService = null;
+    private FileService csvFileService = null;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         setTemplateContext(req, resp);
         serviceSessionValidation(req);
-        // TODO: object Order is Given here by POST request
+
+        // TODO: object Order is Given here by GET request
 //        order = new Order("gliwice", "companyABC", "darek200180@gmail.com", null);
-        System.out.println(req.getSession().getAttribute("processed_order") + " PRCESSD ORDER ");
+//        order.setPaymentSuccessfull();
+
+        //        System.out.println(req.getSession().getAttribute("processed_order") + " PRCESSD ORDER ");
         // TODO MOVE FROM SESSION ID BASED PROCESSING TO SETTING ORDER ID IN SESSION
         int orderId = Integer.parseInt(req.getParameter("order_id"));
         order = orderDataStore.find(orderId);
 
         emailService = new EmailService();
         jsonService = new JSONService();
+        csvFileService = new CSVFileService();
 
         if(order == null) {
             sendErrorOrder(resp);
@@ -79,7 +84,12 @@ public class OrderSummaryController extends BaseController {
         String email = order.getEmail();
 
         // if ok, save order to json file
-        jsonService.saveData(order);
+        String convertedJsonOrder = jsonService.convertData(order);
+        csvFileService.saveToFile("json.csv", convertedJsonOrder);
+
+        order.getCustomerCart().cleanCart();
+
+        System.out.println(order);
 
         // logic to send email that payment was ok
         emailService.sendConfirmation(orderNumber, message, email);
