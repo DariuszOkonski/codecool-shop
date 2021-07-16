@@ -87,6 +87,9 @@ public class OrderSummaryController extends BaseController {
         String convertedJsonOrder = jsonService.convertData(order);
         csvFileService.saveToFile("json.csv", convertedJsonOrder);
 
+        order.getCustomerCart().cleanCart();
+
+        System.out.println(order);
 
         // logic to send email that payment was ok
         emailService.sendConfirmation(orderNumber, message, email);

@@ -29,6 +29,7 @@ public class Cart extends BaseModel {
         }
     }
 
+
     public int getTotalProductCount() {
         int total = 0;
         for (int quantity: productsWithQuantityList.values()) {
@@ -66,5 +67,9 @@ public class Cart extends BaseModel {
 
     public void removeProduct(Product prod) {
         productsWithQuantityList.remove(prod);
+    }
+
+    public void cleanCart() {
+        productsWithQuantityList = new HashMap<>();
     }
 }
