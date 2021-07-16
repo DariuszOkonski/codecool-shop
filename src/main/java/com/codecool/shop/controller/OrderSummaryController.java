@@ -14,6 +14,7 @@ public class OrderSummaryController extends BaseController {
     private Order order = null;
     private MessageService emailService = null;
     private ReportService jsonService = null;
+    private FileService csvFileService = null;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -21,16 +22,17 @@ public class OrderSummaryController extends BaseController {
         serviceSessionValidation(req);
 
         // TODO: object Order is Given here by GET request
-        order = new Order("gliwice", "companyABC", "darek200180@gmail.com", null);
-        order.setPaymentSuccessfull();
+//        order = new Order("gliwice", "companyABC", "darek200180@gmail.com", null);
+//        order.setPaymentSuccessfull();
 
         //        System.out.println(req.getSession().getAttribute("processed_order") + " PRCESSD ORDER ");
         // TODO MOVE FROM SESSION ID BASED PROCESSING TO SETTING ORDER ID IN SESSION
-//        int orderId = Integer.parseInt(req.getParameter("order_id"));
-//        order = orderDataStore.find(orderId);
+        int orderId = Integer.parseInt(req.getParameter("order_id"));
+        order = orderDataStore.find(orderId);
 
         emailService = new EmailService();
         jsonService = new JSONService();
+        csvFileService = new CSVFileService();
 
         if(order == null) {
             sendErrorOrder(resp);
@@ -83,7 +85,7 @@ public class OrderSummaryController extends BaseController {
 
         // if ok, save order to json file
         String convertedJsonOrder = jsonService.convertData(order);
-        System.out.println(convertedJsonOrder);
+        csvFileService.saveToFile("json.csv", convertedJsonOrder);
 
 
         // logic to send email that payment was ok
