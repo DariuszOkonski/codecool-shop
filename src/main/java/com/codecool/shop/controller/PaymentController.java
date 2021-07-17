@@ -26,22 +26,23 @@ public class PaymentController extends BaseController{
         Cart currentCart = cartDataStore.getByName(currentSession);
         CustomerData customerData = customerDataStore.getByName(currentSession);
 
-        Order orderMock = null;
+        Order order;
+
         if (orderDataStore.getByName(currentSession) == null){
-            orderMock = new Order(customerData, currentCart);
-            orderDataStore.add(orderMock);
+            order = new Order(customerData, currentCart);
+            orderDataStore.add(order);
         } else {
-            orderMock = orderDataStore.getByName(currentSession);
+            order = orderDataStore.getByName(currentSession);
         }
-        req.getSession().setAttribute("processed_order", orderMock.getId());
+        req.getSession().setAttribute("processed_order", order.getId());
         BigDecimal amountToPay = currentCart.getSumPrice();
 
         String chosenPaymentMethod = req.getParameter("method");
         if (chosenPaymentMethod != null) {
             PaymentMethod paymentMethod = PaymentMethods.build(chosenPaymentMethod, BigDecimal.ONE, currentSession);
-            orderMock.setPayment(paymentMethod);
+            order.setPayment(paymentMethod);
         }
-        setContextVariables(currentSession, amountToPay, chosenPaymentMethod, orderMock.getCustomerCart().getSumPrice());
+        setContextVariables(currentSession, amountToPay, chosenPaymentMethod, order.getCustomerCart().getSumPrice(), order.getCustomerCart());
 
 
         engine.process(getPaymentMethodTemplate(chosenPaymentMethod), context, resp.getWriter());
@@ -87,10 +88,11 @@ public class PaymentController extends BaseController{
 
     }
 
-    private void setContextVariables(String sessionID, BigDecimal cartSumPrice, String chosenPaymentMethod, BigDecimal sumToPay) {
+    private void setContextVariables(String sessionID, BigDecimal cartSumPrice, String chosenPaymentMethod, BigDecimal sumToPay, Cart cart) {
         // TODO: check if refactorable
         context.setVariable("userId", sessionID);
         context.setVariable("amountToPay", cartSumPrice);
+        context.setVariable("itemsInCart", cart.getTotalProductCount());
         context.setVariable("sumToPay", sumToPay);
         if (chosenPaymentMethod == null) {
             context.setVariable("paymentMethods", PaymentMethods.values());
