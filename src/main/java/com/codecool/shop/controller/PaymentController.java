@@ -72,16 +72,15 @@ public class PaymentController extends BaseController{
 
         Order ord = orderDataStore.getByName(req.getSession().getId());
         CreditCard card = new CreditCard(cardNumber, expYear, expMonth, cvv);
-        if (card.isDataCorrect() && card.fundsEnoughFor(ord.getCustomerCart().getSumPrice())) {
-            ord.setPaymentSuccessfull(true);
-
-            //redirect to main page
-        } else {
-            ord.setPaymentSuccessfull(false);
-        }
+        ord.setPaymentSuccessfull(isPaymentSuccessful(ord, card));
         // TODO MOVE FROM SESSION ID BASED PROCESSING TO SETTING ORDER ID IN SESSION
+            //redirect to main page
         req.getSession().setAttribute("processed_order", ord.getId());
         resp.sendRedirect(String.format("/order-summary?order_id=%s", ord.getId()));
+    }
+
+    private boolean isPaymentSuccessful(Order ord, CreditCard card) {
+        return card.isDataCorrect() && card.fundsEnoughFor(ord.getCustomerCart().getSumPrice());
     }
 
     private void servicePayPalPayment(HttpServletRequest req, HttpServletResponse resp) throws IOException{

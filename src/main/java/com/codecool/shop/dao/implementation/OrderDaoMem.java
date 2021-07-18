@@ -40,7 +40,7 @@ public class OrderDaoMem implements OrderDao {
     @Override
     public Order getByName(String name) {
         return data.stream()
-                .filter(order -> order.getName() == name)
+                .filter(order -> order.getName().equals(name))
                 .findFirst()
                 .orElse(null);
     }

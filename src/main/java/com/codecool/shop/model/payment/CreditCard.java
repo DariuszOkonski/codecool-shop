@@ -41,15 +41,6 @@ public class CreditCard {
             }
         }
         return true;
-//        if (stringNumb == null) {
-//            return false;
-//        }
-//        try {
-//            int d = Integer.parseInt(stringNumb);
-//        } catch (NumberFormatException nfe) {
-//            return false;
-//        }
-//        return true;
     }
     private boolean charIsNumeric(String chr) {
         try {

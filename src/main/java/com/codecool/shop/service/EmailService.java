@@ -21,12 +21,6 @@ public class EmailService implements MessageService{
 
         // email logic
         System.out.println("SENDING EMAIL: ");
-//        System.out.println("order nr: " + orderNumber);
-//        System.out.println("message: " + incomingMessage);
-//        System.out.println("to: " + incomingEmail);
-//
-
-//        java_gmail_attempt();
 
     }
 

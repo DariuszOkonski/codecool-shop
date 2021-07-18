@@ -2,20 +2,18 @@ package com.codecool.shop.model;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.text.DecimalFormat;
+import java.util.Map;
 
 public class Cart extends BaseModel {
 
-    private HashMap<Product, Integer> productsWithQuantityList = new HashMap<>();
+    private Map<Product, Integer> productsWithQuantityList = new HashMap<>();
 
     public Cart(String name) {
         super(name);
     }
 
-    public HashMap<Product, Integer> getProductsWithQuantityList() {
+    public Map<Product, Integer> getProductsWithQuantityList() {
         return productsWithQuantityList;
     }
 

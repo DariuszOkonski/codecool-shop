@@ -27,8 +27,7 @@ public abstract class BaseController extends HttpServlet {
 
     private boolean doesCartSessionExist(HttpServletRequest req){
         HttpSession session = req.getSession();
-        boolean isUserInSession = session.getAttribute("user_id") != null;
-        return isUserInSession;
+        return session.getAttribute("user_id") != null;
     }
 
     private void setSessionCart(HttpServletRequest req) {

@@ -7,13 +7,7 @@ public class JSONService implements ReportService {
     @Override
     public String convertData(Order order) {
         Gson json = new Gson();
-        String response = json.toJson(order);
-        return response;
+        return json.toJson(order);
     }
 
-//    public Order convertData(String jsonFormat) {
-//        Gson json = new Gson();
-//        Order order = json.fromJson(jsonFormat, Order.class);
-//        return order;
-//    }
 }

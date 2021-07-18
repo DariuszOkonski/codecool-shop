@@ -69,9 +69,8 @@ public class ProductController extends BaseController {
         int category_id = Integer.parseInt(req.getParameter("category_id"));
         int supplier_id = Integer.parseInt(req.getParameter("supplier_id"));
         List<Product> products = productService.getProductsForCategory(category_id);
-        int finalSupplier_id = supplier_id;
         return products.stream()
-                .filter(product -> product.getSupplier().getId() == finalSupplier_id)
+                .filter(product -> product.getSupplier().getId() == supplier_id)
                 .collect(Collectors.toList());
     }
 

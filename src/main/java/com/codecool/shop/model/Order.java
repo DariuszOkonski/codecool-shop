@@ -18,7 +18,7 @@ public class Order extends BaseModel {
 
 
     public Order(CustomerData customerData, Cart customerCart) {
-        super(customerData.getName(), "transaction date: " + LocalDateTime.now().toString());
+        super(customerData.getName(), "transaction date: " + LocalDateTime.now());
         this.customerData = customerData;
         this.customerCart = customerCart;
         this.isPaymentSuccessfull = false; // TODO: remove
@@ -36,10 +36,6 @@ public class Order extends BaseModel {
     public void setPaymentSuccessfull() {
         isPaymentSuccessfull = true;
     }
-
-//    public String getOrderNumber() {
-//        return orderNumber;
-//    }
 
     public String getCustomerName() {
         return customerData.getName();
