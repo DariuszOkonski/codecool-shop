@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8" />
+  <meta name="author" content="Codecool" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <title>Codecool Shop</title>
+
+  <!-- Bootstrap components -->
+  <!-- Latest compiled and minified Jquery -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+          integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+  <!--Latest compiled and minified Popper -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+          integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+          integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+  <!-- Latest compiled and minified CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <!-- End of Bootstrap components -->
+
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css" />
+  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p"
+        crossorigin="anonymous"/>
+</head>
+
+<body>
+
+<header th:replace="header.html :: header"></header>
+
+<div class="container">
+
+
+  <section class="shopping-cart dark">
+    <div class="container">
+      <div class="block-heading">
+        <h2>Shopping Cart</h2>
+      </div>
+      <div class="content">
+        <div class="row">
+          <div class="col-md-12 col-lg-8">
+            <div class="items">
+
+              <div class="product" th:each="prod,iterStat : ${cart.getProductsWithQuantityList().keySet()}">
+                <div class="row">
+                  <div class="col-md-3">
+                    <img class="img-fluid mx-auto d-block image" th:attr="src='/static/img/product_' + ${prod.getId()} + '.jpg'">
+                  </div>
+                  <div class="col-md-8">
+                    <div class="info">
+                      <div class="row">
+                        <div class="col-md-5 product-name">
+                          <div class="product-name">
+                            <a href="#" th:text="${prod.getName()}">Lorem Ipsum dolor</a>
+                            <div class="product-info">
+                              <div>Display: <span class="value">5 inch</span></div>
+                              <div>RAM: <span class="value">4GB</span></div>
+                              <div>Memory: <span class="value">32GB</span></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-3 quantity">
+                          <label th:attr="for='quantity' + ${prod.getId()}">Quantity:</label>
+                          <input type="number"  name="quantity" min="0" th:attr="id='quantity' + ${prod.getId()}, data-id=${prod.getId()}" th:value="${cart.getProductsWithQuantityList().get(prod)}" class="form-control quantity-input quantity-input-js">
+                        </div>
+                        <div class="col-md-3 price">
+                            <span th:attr="data-id=${prod.getId()}, data-price=${prod.getDefaultPrice()}, data-currency=${prod.getDefaultCurrency()}" th:text="${cart.getProductTotal(prod)} + ' ' + ${prod.getDefaultCurrency()}"></span>
+                        </div>
+                        <div class="col-md-1 d-flex flex-column justify-content-center removeButton" >
+                          <a th:href="@{/delete-item(product_id=${prod.getId()})}">
+                            <i class="far fa-times-circle" style="font-size: 30px; color: crimson"></i>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="col-md-12 col-lg-4">
+            <div class="summary">
+              <h3>Summary</h3>
+              <div class="summary-item"><span class="text">Total</span><span class="price" th:text="${cart.getSumPrice()}" >$0</span></div>
+                <form th:action="@{/checkout}">
+                  <button type="submit" class="btn btn-primary btn-lg btn-block">Checkout</button>
+                </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+</div>
+
+<div th:replace="footer.html :: copy"></div>
+
+<script src="/static/js/script1.js" defer></script>
+</body>
+</html>

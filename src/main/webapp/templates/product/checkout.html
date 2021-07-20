@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="author" content="Codecool" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <title>Codecool Shop</title>
+
+    <!-- Bootstrap components -->
+    <!-- Latest compiled and minified Jquery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+    <!--Latest compiled and minified Popper -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+            integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <!-- End of Bootstrap components -->
+
+    <link rel="stylesheet" type="text/css" href="/static/css/custom.css" />
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+          integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p"
+          crossorigin="anonymous"/>
+</head>
+
+<body>
+
+<header th:replace="header.html :: header"></header>
+
+<div class="container">
+
+
+    <section class="shopping-cart dark">
+        <div class="container">
+            <div class="block-heading">
+                <h2>Customer's info</h2>
+            </div>
+            <div class="content">
+                <div class="row">
+                    <div class="col-md-12 col-lg-8 p-3">
+                        <form id="customers_info" th:method="post" th:action="@{/checkout}" class="needs_validation m-3">
+                        <div class="mb-5">
+                            <h3>Basic info:</h3>
+                            <div class="form-group">
+                                <label for="name">Name:</label>
+                                <input type="text" name="name" id="name" class="form-control" placeholder="John Doe"
+                                       aria-describedby="helpname" required>
+                                <small id="helpname" class="text-muted">Please type your name</small>
+                            </div>
+                            <div class="form-group">
+                                    <label for="email">Email:</label>
+                                    <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelpId"
+                                       placeholder="person@example.com" required>
+                                    <small id="emailHelpId" class="form-text text-muted">Please type your email</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone:</label>
+                                <input type="text" class="form-control" name="phone" id="phone" aria-describedby="phoneHelpId"
+                                       placeholder="+48 555 000 555" required pattern="(\+?\d+\-?){3}">
+                                <small id="phoneHelpId" class="form-text text-muted">Please type your phone number</small>
+                            </div>
+                        </div>
+
+                        <div class="mb-5">
+                            <h3>Billing address:</h3>
+                            <div class="form-group">
+                                <label for="billing-address">Address:</label>
+                                <input type="text" name="billing-address" id="billing-address" class="form-control" placeholder="Brazil St. 75"
+                                       aria-describedby="helpbillingaddress" required>
+                                <small id="helpbillingaddress" class="text-muted">Please type your shipping address</small>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group mr-5">
+                                    <label for="billing-zip-code">Zip code:</label>
+                                    <input type="text" name="billing-zip-code" id="billing-zip-code" class="form-control" placeholder="00-999"
+                                           aria-describedby="helpbillingaddresszip" required pattern="(\d\d-\d\d\d)">
+                                    <small id="helpbillingaddresszip" class="text-muted">Please type your shipping address zip code</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="billing-city">City:</label>
+                                    <input type="text" name="billing-city" id="billing-city" class="form-control" placeholder="Las Vegas"
+                                           aria-describedby="helpbillingcity" required>
+                                    <small id="helpbillingcity" class="text-muted">Please type your shipping address city</small>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="billing-country">Select country:</label>
+                                <select id="billing-country" name="billing-country" class="form-control" required th:insert="product/countries.html :: countries_list">
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-5">
+                            <h3>Shipping address:</h3>
+                            <div class="form-group">
+                                <label for="shipping-address">Address:</label>
+                                <input type="text" name="shipping-address" id="shipping-address" class="form-control" placeholder="Brazil St. 75"
+                                       aria-describedby="helpshippingaddress" required>
+                                <small id="helpshippingaddress" class="text-muted">Please type your shipping address</small>
+                            </div>
+                            <div class="form-row">
+                            <div class="form-group mr-5">
+                                <label for="shipping-zip-code">Zip code:</label>
+                                <input type="text" name="shipping-zip-code" id="shipping-zip-code" class="form-control" placeholder="00-999"
+                                       aria-describedby="helpshippingaddresszip" required pattern="(\d\d-\d\d\d)">
+                                <small id="helpshippingaddresszip" class="text-muted">Please type your shipping address zip code</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="shipping-city">City:</label>
+                                <input type="text" name="shipping-city" id="shipping-city" class="form-control" placeholder="Las Vegas"
+                                       aria-describedby="helpshippingcity" required>
+                                <small id="helpshippingcity" class="text-muted">Please type your shipping address city</small>
+                            </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="country">Select country:</label>
+                                <select id="country" name="shipping-country" class="form-control" required th:insert="product/countries.html :: countries_list">
+                                </select>
+                            </div>
+                        </div>
+
+                        </form>
+
+                    </div>
+                    <div class="col-md-12 col-lg-4">
+                        <div class="summary">
+                            <div class="sticky">
+                            <h3>Summary</h3>
+                            <div class="summary-item"><span class="text">Total</span><span class="price" th:text="${cart.getSumPrice()}" >$0</span></div>
+                            <button type="submit" form="customers_info" class="btn btn-primary btn-lg btn-block">Go to Payment</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<div th:replace="footer.html :: copy"></div>
+
+<script src="/static/js/script1.js" defer></script>
+</body>
+</html>

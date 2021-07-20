@@ -25,19 +25,52 @@
           integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <!-- End of Bootstrap components -->
 
+
     <link rel="stylesheet" type="text/css" href="/static/css/custom.css" />
 </head>
 
 <body>
 
-<div class="jumbotron text-center">
-    <h1>Codecool Shop</h1>
-</div>
+<header th:replace="header.html :: header"></header>
 
 <div class="container">
-    <div class="card">
-        <strong th:text="${category.name}">Category Title</strong>
+    <div class="d-flex flex-row">
+        <div class="dropdown p-1">
+            <button class="btn btn-secondary dropdown-toggle"
+                    type="button" id="dropdownMenu1" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false" th:text="${category.name}">
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
+
+                <div th:each="cat, iterStat : ${categories}">
+                    <a class="dropdown-item" href="#!"
+
+                       th:href="@{/(category_id=${cat.getId()}, supplier_id=${param.keySet().contains('supplier_id')} ? ${param.supplier_id} : 0)}" th:text="${cat.getName()}"
+                    >name</a>
+                </div>
+
+            </div>
+        </div>
+        <div class="dropdown p-1">
+            <button class="btn btn-secondary dropdown-toggle"
+                    type="button" id="dropdownMenu2" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                Suppliers
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
+
+                <div th:each="supp, iterStat : ${suppliers}">
+                    <a class="dropdown-item" href="#!"
+                       th:href="@{/(
+                        supplier_id=${supp.getId()},
+                        category_id=${category.getId()})}"
+                       th:text="${supp.getName()}">name</a>
+                </div>
+
+            </div>
+        </div>
     </div>
+
 
     <div id="products" class="row">
         <div class="col col-sm-12 col-md-6 col-lg-4" th:each="prod,iterStat : ${products}">
@@ -52,7 +85,11 @@
                         <p class="lead" th:text="${prod.getPrice()}">100 USD</p>
                     </div>
                     <div class="card-text">
-                        <a class="btn btn-success" href="#">Add to cart</a>
+                        <form action="/cart" method="post">
+                        <input type="hidden" name="product_id" th:value="${prod.id}">
+                        <input type="hidden" name="quantity" value="1">
+                        <input type="submit" class="btn btn-success" value="Add to cart" />
+                        </form>
                     </div>
                 </div>
             </div>
@@ -63,5 +100,6 @@
 
 <div th:replace="footer.html :: copy"></div>
 
+<script src="/static/js/script1.js" defer></script>
 </body>
 </html>
