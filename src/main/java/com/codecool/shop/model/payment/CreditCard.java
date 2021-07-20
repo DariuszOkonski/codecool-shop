@@ -16,6 +16,9 @@ public class CreditCard {
         this.monthExpirationNum = monthExpirationNum;
         this.cvv = cvv;
     }
+    public boolean isPaymentPossible(BigDecimal sumToPay){
+        return isDataCorrect() && fundsEnoughFor(sumToPay);
+    }
 
     public boolean isDataCorrect(){
         return cardNumCorrect() && isNotExpired() && serialNumCorrect();
@@ -52,5 +55,9 @@ public class CreditCard {
 
     private boolean isNotExpired(){
         return LocalDate.now().isBefore(LocalDate.parse(yearExpirationNum + "-" + monthExpirationNum + "-" + "01"));
+    }
+
+    public void decreaseFunds(BigDecimal sumPrice) {
+        funds = funds.subtract(sumPrice);
     }
 }

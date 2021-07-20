@@ -8,10 +8,6 @@ import java.time.LocalDateTime;
 public class Order extends BaseModel {
 
     private boolean isPaymentSuccessfull;
-    private String orderNumber = "abcd1234";
-    private String customerAddress;
-    private String customerName;
-    private String email;
     private PaymentMethod payment;
     private Cart customerCart;
     private CustomerData customerData;

@@ -1,11 +1,11 @@
 package com.codecool.shop.controller;
 
 import com.codecool.shop.model.Cart;
-import com.codecool.shop.model.CustomerData;
 import com.codecool.shop.model.payment.CreditCard;
 import com.codecool.shop.model.payment.PaymentMethod;
 import com.codecool.shop.model.payment.PaymentMethods;
 import com.codecool.shop.model.Order;
+import com.codecool.shop.service.OrderService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,33 +17,29 @@ import java.math.BigDecimal;
 
 @WebServlet(urlPatterns = {"/payment"})
 public class PaymentController extends BaseController{
+    private OrderService orderService = new OrderService(cartDataStore, orderDataStore, customerDataStore);
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         setTemplateContext(req, resp);
         serviceSessionValidation(req);
 
         String currentSession = req.getSession().getId();
-        Cart currentCart = cartDataStore.getByName(currentSession);
-        CustomerData customerData = customerDataStore.getByName(currentSession);
 
-        Order order;
+        if (orderService.ordersExists(currentSession))
+            orderService.setNewOrderForSession(currentSession);
 
-        if (orderDataStore.getByName(currentSession) == null){
-            order = new Order(customerData, currentCart);
-            orderDataStore.add(order);
-        } else {
-            order = orderDataStore.getByName(currentSession);
-        }
+        Order order = orderService.findOrder(currentSession);
+
+        //TODO futures artifact
         req.getSession().setAttribute("processed_order", order.getId());
-        BigDecimal amountToPay = currentCart.getSumPrice();
 
+        BigDecimal amountToPay = order.getCustomerCart().getSumPrice();
         String chosenPaymentMethod = req.getParameter("method");
         if (chosenPaymentMethod != null) {
-            PaymentMethod paymentMethod = PaymentMethods.build(chosenPaymentMethod, BigDecimal.ONE, currentSession);
+            PaymentMethod paymentMethod = PaymentMethods.build(chosenPaymentMethod, amountToPay, currentSession);
             order.setPayment(paymentMethod);
         }
         setContextVariables(currentSession, amountToPay, chosenPaymentMethod, order.getCustomerCart().getSumPrice(), order.getCustomerCart());
-
 
         engine.process(getPaymentMethodTemplate(chosenPaymentMethod), context, resp.getWriter());
     }
@@ -69,18 +65,20 @@ public class PaymentController extends BaseController{
         String expYear = req.getParameter("expirationYear");
         String expMonth = req.getParameter("expirationMonth");
         String cvv = req.getParameter("cvv");
-
-        Order ord = orderDataStore.getByName(req.getSession().getId());
         CreditCard card = new CreditCard(cardNumber, expYear, expMonth, cvv);
-        ord.setPaymentSuccessfull(isPaymentSuccessful(ord, card));
+
+        Order ord = orderService.findOrder(req.getSession().getId());
+        BigDecimal sumPrice = ord.getCustomerCart().getSumPrice();
+
+        boolean paymentPossible = card.isPaymentPossible(sumPrice);
+        if(paymentPossible) card.decreaseFunds(sumPrice);
+
+        ord.setPaymentSuccessfull(paymentPossible);
+
         // TODO MOVE FROM SESSION ID BASED PROCESSING TO SETTING ORDER ID IN SESSION
             //redirect to main page
         req.getSession().setAttribute("processed_order", ord.getId());
         resp.sendRedirect(String.format("/order-summary?order_id=%s", ord.getId()));
-    }
-
-    private boolean isPaymentSuccessful(Order ord, CreditCard card) {
-        return card.isDataCorrect() && card.fundsEnoughFor(ord.getCustomerCart().getSumPrice());
     }
 
     private void servicePayPalPayment(HttpServletRequest req, HttpServletResponse resp) throws IOException{
