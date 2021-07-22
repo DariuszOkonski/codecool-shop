@@ -3,13 +3,13 @@
 -- DROP TABLE zip_code;
 -- DROP TABLE city;
 -- DROP TABLE street;
--- DROP TABLE adress;
+-- DROP TABLE address;
 -- DROP TABLE "user";
 -- DROP TABLE cart;
 -- DROP TABLE product;
 -- DROP TABLE cart_items;
 -- DROP TABLE customer_data;
--- DROP TABLE departament;
+-- DROP TABLE department;
 -- DROP TABLE order_status;
 -- DROP TABLE "order";
 -- DROP TABLE product_category;
@@ -71,6 +71,50 @@ ALTER TABLE IF EXISTS ONLY user_session DROP CONSTRAINT IF EXISTS FK_123 CASCADE
 
 
 
+
+
+-- *************** SqlDBM: PostgreSQL ****************;
+-- ***************************************************;
+
+-- DROP TABLE country;
+
+
+
+-- ************************************** country
+
+
+DROP TABLE IF EXISTS country;
+CREATE TABLE country
+(
+    "id"           serial NOT NULL,
+    country_name varchar(50) NOT NULL,
+    CONSTRAINT PK_country PRIMARY KEY ( "id" )
+);
+
+
+-- *************** SqlDBM: PostgreSQL ****************;
+-- ***************************************************;
+
+-- DROP TABLE zip_code;
+
+
+
+-- ************************************** zip_code
+
+
+
+
+DROP TABLE IF EXISTS zip_code;
+CREATE TABLE zip_code
+(
+    "id"   serial NOT NULL,
+    code varchar(50) NOT NULL,
+    CONSTRAINT PK_zip_code PRIMARY KEY ( "id" )
+);
+
+
+
+
 -- *************** SqlDBM: PostgreSQL ****************;
 -- ***************************************************;
 
@@ -103,55 +147,6 @@ CREATE INDEX fkIdx_202 ON city
 
 
 
-
--- *************** SqlDBM: PostgreSQL ****************;
--- ***************************************************;
-
--- DROP TABLE country;
-
-
-
--- ************************************** country
-
-
-DROP TABLE IF EXISTS country;
-CREATE TABLE country
-(
-    "id"           serial NOT NULL,
-    country_name varchar(50) NOT NULL,
-    CONSTRAINT PK_country PRIMARY KEY ( "id" )
-);
-
-
-
-
-
-
-
--- *************** SqlDBM: PostgreSQL ****************;
--- ***************************************************;
-
--- DROP TABLE zip_code;
-
-
-
--- ************************************** zip_code
-
-
-
-
-DROP TABLE IF EXISTS zip_code;
-CREATE TABLE zip_code
-(
-    "id"   serial NOT NULL,
-    code varchar(50) NOT NULL,
-    CONSTRAINT PK_zip_code PRIMARY KEY ( "id" )
-);
-
-
-
-
-
 -- *************** SqlDBM: PostgreSQL ****************;
 -- ***************************************************;
 
@@ -176,11 +171,11 @@ CREATE TABLE street
 -- *************** SqlDBM: PostgreSQL ****************;
 -- ***************************************************;
 
--- DROP TABLE adress;
+-- DROP TABLE address;
 
 
 
--- ************************************** adress
+-- ************************************** address
 DROP TABLE IF EXISTS address;
 CREATE TABLE address
 (
@@ -196,22 +191,22 @@ CREATE TABLE address
     CONSTRAINT FK_251 FOREIGN KEY ( street_id ) REFERENCES street ( "id" )
 );
 
-CREATE INDEX fkIdx_237 ON adress
+CREATE INDEX fkIdx_237 ON address
     (
      country_id
         );
 
-CREATE INDEX fkIdx_246 ON adress
+CREATE INDEX fkIdx_246 ON address
     (
      zip_code_id
         );
 
-CREATE INDEX fkIdx_249 ON adress
+CREATE INDEX fkIdx_249 ON address
     (
      city_id
         );
 
-CREATE INDEX fkIdx_252 ON adress
+CREATE INDEX fkIdx_252 ON address
     (
      street_id
         );
@@ -265,6 +260,79 @@ CREATE INDEX fkIdx_94 ON cart
     (
      user_id
         );
+
+
+
+
+
+
+-- *************** SqlDBM: PostgreSQL ****************;
+-- ***************************************************;
+
+-- DROP TABLE department;
+
+
+
+-- ************************************** department
+DROP TABLE IF EXISTS department;
+CREATE TABLE department
+(
+    "id"   serial NOT NULL,
+    name varchar(50) NOT NULL,
+    CONSTRAINT PK_department PRIMARY KEY ( "id" )
+);
+
+
+
+
+
+
+-- *************** SqlDBM: PostgreSQL ****************;
+-- ***************************************************;
+
+-- DROP TABLE supplier;
+
+
+
+-- ************************************** supplier
+DROP TABLE IF EXISTS supplier;
+CREATE TABLE supplier
+(
+    "id"          serial NOT NULL,
+    name        varchar(50) NOT NULL,
+    description text NOT NULL,
+    CONSTRAINT PK_supplier PRIMARY KEY ( "id" )
+);
+
+
+
+
+
+
+
+-- *************** SqlDBM: PostgreSQL ****************;
+-- ***************************************************;
+
+-- DROP TABLE product_category;
+
+
+
+-- ************************************** "public".product_category
+DROP TABLE IF EXISTS product_category;
+CREATE TABLE product_category
+(
+    "id"             serial NOT NULL,
+    department_id integer NOT NULL,
+    name           varchar(50) NOT NULL,
+    CONSTRAINT PK_productcategory PRIMARY KEY ( "id" ),
+    CONSTRAINT FK_71 FOREIGN KEY ( department_id ) REFERENCES department ( "id" )
+);
+
+CREATE INDEX fkIdx_72 ON product_category
+    (
+     department_id
+        );
+
 
 
 
@@ -361,15 +429,15 @@ CREATE TABLE customer_data
 (
     "id"                    serial NOT NULL,
     user_id               integer NOT NULL,
-    billing_adress_id     integer NOT NULL,
-    shipping_adress_id    integer NOT NULL,
+    billing_address_id     integer NOT NULL,
+    shipping_address_id    integer NOT NULL,
     customer_email        varchar(50) NOT NULL,
     customer_name         varchar(50) NOT NULL,
     customer_phone_number varchar(50) NOT NULL,
     CONSTRAINT PK_customer_data PRIMARY KEY ( "id" ),
     CONSTRAINT FK_145 FOREIGN KEY ( user_id ) REFERENCES "user" ( "id" ),
-    CONSTRAINT FK_254 FOREIGN KEY ( billing_adress_id ) REFERENCES adress ( "id" ),
-    CONSTRAINT FK_257 FOREIGN KEY ( shipping_adress_id ) REFERENCES adress ( "id" )
+    CONSTRAINT FK_254 FOREIGN KEY ( billing_address_id ) REFERENCES address ( "id" ),
+    CONSTRAINT FK_257 FOREIGN KEY ( shipping_address_id ) REFERENCES address ( "id" )
 );
 
 CREATE INDEX fkIdx_146 ON customer_data
@@ -379,35 +447,13 @@ CREATE INDEX fkIdx_146 ON customer_data
 
 CREATE INDEX fkIdx_255 ON customer_data
     (
-     billing_adress_id
+     billing_address_id
         );
 
 CREATE INDEX fkIdx_258 ON customer_data
     (
-     shipping_adress_id
+     shipping_address_id
         );
-
-
-
-
-
-
-
--- *************** SqlDBM: PostgreSQL ****************;
--- ***************************************************;
-
--- DROP TABLE departament;
-
-
-
--- ************************************** departament
-DROP TABLE IF EXISTS department;
-CREATE TABLE department
-(
-    "id"   serial NOT NULL,
-    name varchar(50) NOT NULL,
-    CONSTRAINT PK_department PRIMARY KEY ( "id" )
-);
 
 
 
@@ -477,57 +523,6 @@ CREATE INDEX fkIdx_117 ON "order"
 
 
 
-
-
-
-
-
--- *************** SqlDBM: PostgreSQL ****************;
--- ***************************************************;
-
--- DROP TABLE product_category;
-
-
-
--- ************************************** "public".product_category
-DROP TABLE IF EXISTS product_category;
-CREATE TABLE product_category
-(
-    "id"             serial NOT NULL,
-    departament_id integer NOT NULL,
-    name           varchar(50) NOT NULL,
-    CONSTRAINT PK_productcategory PRIMARY KEY ( "id" ),
-    CONSTRAINT FK_71 FOREIGN KEY ( departament_id ) REFERENCES departament ( "id" )
-);
-
-CREATE INDEX fkIdx_72 ON product_category
-    (
-     departament_id
-        );
-
-
-
-
-
-
-
-
--- *************** SqlDBM: PostgreSQL ****************;
--- ***************************************************;
-
--- DROP TABLE supplier;
-
-
-
--- ************************************** supplier
-DROP TABLE IF EXISTS supplier;
-CREATE TABLE supplier
-(
-    "id"          serial NOT NULL,
-    name        varchar(50) NOT NULL,
-    description text NOT NULL,
-    CONSTRAINT PK_supplier PRIMARY KEY ( "id" )
-);
 
 
 
