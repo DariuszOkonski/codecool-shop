@@ -52,6 +52,8 @@ public class Initializer implements ServletContextListener {
 
 
     }
+
+
 }
 
 // check if session ? create new Cart : cart istnieje
