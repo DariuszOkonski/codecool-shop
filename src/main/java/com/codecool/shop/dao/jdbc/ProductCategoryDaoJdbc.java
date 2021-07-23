@@ -17,11 +17,14 @@ public class ProductCategoryDaoJdbc implements ProductCategoryDao {
     @Override
     public void add(ProductCategory category) {
         try(Connection conn = dataSource.getConnection()){
-            String sql = "";
-            PreparedStatement statement = conn.prepareStatement(sql);
-            statement.executeUpdate();
-            ResultSet resultSet = statement.getGeneratedKeys();
-
+//
+            String sqlCategory = "INSERT INTO product_category (name, department_id, description) " +
+                    "VALUES (?, (SELECT id FROM department WHERE name=?), ?)";
+            PreparedStatement statement1 = conn.prepareStatement(sqlCategory);
+            statement1.setString(1, category.getName());
+            statement1.setString(2, category.getDepartment());
+            statement1.setString(3, category.getDescription());
+            statement1.executeUpdate();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

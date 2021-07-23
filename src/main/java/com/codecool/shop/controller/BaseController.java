@@ -28,20 +28,13 @@ public abstract class BaseController extends HttpServlet {
     protected WebContext context = null;
 
     public BaseController() {
-        DatabaseManager databaseManager = new DatabaseManager();
 
-        try {
-            databaseManager.setup();
-            productDataStore = databaseManager.getProductDao();
-            productCategoryDataStore = databaseManager.getProductCategoryDao();
-            supplierDataStore = databaseManager.getSupplierDao();
-            cartDataStore = databaseManager.getCartDao();
-            orderDataStore = databaseManager.getOrderDao();
-            customerDataStore = databaseManager.getCustomerDataDao();
-
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+        productDataStore = DatabaseManager.getINSTANCE().getProductDao();
+        productCategoryDataStore = DatabaseManager.getINSTANCE().getProductCategoryDao();
+        supplierDataStore = DatabaseManager.getINSTANCE().getSupplierDao();
+        cartDataStore = DatabaseManager.getINSTANCE().getCartDao();
+        orderDataStore = DatabaseManager.getINSTANCE().getOrderDao();
+        customerDataStore = DatabaseManager.getINSTANCE().getCustomerDataDao();
 
 
         productService = new ProductService(productDataStore,productCategoryDataStore, supplierDataStore);

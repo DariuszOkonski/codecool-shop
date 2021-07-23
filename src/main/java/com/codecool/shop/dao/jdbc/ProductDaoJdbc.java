@@ -22,13 +22,19 @@ public class ProductDaoJdbc implements ProductDao {
     @Override
     public void add(Product product) {
         try(Connection conn = dataSource.getConnection()){
-            String sql = "";
-            PreparedStatement statement = conn.prepareStatement(sql);
-//            statement.setString(1, );
-
-            statement.executeUpdate();
-            ResultSet resultSet = statement.getGeneratedKeys();
-
+            String sql = "INSERT INTO product " +
+                    "(name, default_price, default_currency, description, category_id, supplier_id) " +
+                    "VALUES (?,?,?,?, " +
+                    "(SELECT id FROM product_category WHERE name=?)," +
+                    "(SELECT id FROM supplier WHERE name=?))";
+            PreparedStatement statement1 = conn.prepareStatement(sql);
+            statement1.setString(1, product.getName());
+            statement1.setFloat(2, product.getDefaultPrice());
+            statement1.setString(3, product.getDefaultCurrency().toString());
+            statement1.setString(4, product.getDescription());
+            statement1.setString(5, product.getProductCategory().getName());
+            statement1.setString(6, product.getSupplier().getName());
+            statement1.executeUpdate();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -49,6 +55,12 @@ public class ProductDaoJdbc implements ProductDao {
 
     @Override
     public List<Product> getAll() {
+//        try(Connection conn = dataSource.getConnection()){
+//            String sqlCategory = "SELECT * FROM product";
+//
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
         return null;
     }
 

@@ -20,12 +20,14 @@ public class SupplierDaoJdbc implements SupplierDao {
     @Override
     public void add(Supplier supplier) {
         try(Connection conn = dataSource.getConnection()){
-            String sql = "";
+            String sql = "INSERT INTO supplier (name, description) VALUES (?, ?) ";
             PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setString(1, supplier.getName());
+            statement.setString(2, supplier.getDescription());
             statement.executeUpdate();
-            ResultSet resultSet = statement.getGeneratedKeys();
-
-
+//            ResultSet resultSet = statement.getGeneratedKeys();
+//            resultSet.next();
+//            supplier.setId(resultSet.getInt(1));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

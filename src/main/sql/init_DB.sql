@@ -300,7 +300,7 @@ CREATE TABLE supplier
 (
     "id"          serial NOT NULL,
     name        varchar(50) NOT NULL,
-    description text NOT NULL,
+    description text,
     CONSTRAINT PK_supplier PRIMARY KEY ( "id" )
 );
 
@@ -324,6 +324,7 @@ CREATE TABLE product_category
     "id"             serial NOT NULL,
     department_id integer NOT NULL,
     name           varchar(50) NOT NULL,
+    description text,
     CONSTRAINT PK_productcategory PRIMARY KEY ( "id" ),
     CONSTRAINT FK_71 FOREIGN KEY ( department_id ) REFERENCES department ( "id" )
 );
@@ -353,7 +354,7 @@ CREATE TABLE product
     category_id      integer NOT NULL,
     supplier_id      integer NOT NULL,
     name             varchar(50) NOT NULL,
-    description      varchar(50) NOT NULL,
+    description      text NOT NULL,
     default_price    decimal NOT NULL,
     default_currency varchar(50) NOT NULL,
     CONSTRAINT PK_product PRIMARY KEY ( "id" ),
@@ -566,3 +567,4 @@ CREATE INDEX fkIdx_124 ON user_session
 
 
 
+INSERT INTO department (id, name) VALUES (1, 'Hardware');

@@ -27,7 +27,7 @@ public class CustomerDataDaoJdbc implements CustomerDataDao {
         try(Connection conn = dataSource.getConnection()){
             String sql = "";
             PreparedStatement statement = conn.prepareStatement(sql);
-            statement.setString(1, );
+//            statement.setString(1, );
 
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
