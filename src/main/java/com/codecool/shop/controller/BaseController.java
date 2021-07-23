@@ -3,6 +3,7 @@ package com.codecool.shop.controller;
 import com.codecool.shop.config.TemplateEngineUtil;
 import com.codecool.shop.dao.*;
 import com.codecool.shop.dao.implementation.*;
+import com.codecool.shop.dao.jdbc.DatabaseManager;
 import com.codecool.shop.model.Cart;
 import com.codecool.shop.service.ProductService;
 import org.thymeleaf.TemplateEngine;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.sql.SQLException;
 
 public abstract class BaseController extends HttpServlet {
     protected ProductDao productDataStore = ProductDaoMem.getInstance();
@@ -20,10 +22,34 @@ public abstract class BaseController extends HttpServlet {
     protected CartDao cartDataStore = CartDaoMem.getInstance();
     protected OrderDao orderDataStore = OrderDaoMem.getInstance();
 
-    protected ProductService productService = new ProductService(productDataStore,productCategoryDataStore, supplierDataStore);
-    protected CustomerDataDao customerDataStore = CustomerDataDaoMem.getInstance();
+    protected ProductService productService = null;
+    protected CustomerDataDao customerDataStore = null;
     protected TemplateEngine engine = null;
     protected WebContext context = null;
+
+    public BaseController() {
+        DatabaseManager databaseManager = new DatabaseManager();
+
+        try {
+            databaseManager.setup();
+            productDataStore = databaseManager.getProductDao();
+            productCategoryDataStore = databaseManager.getProductCategoryDao();
+            supplierDataStore = databaseManager.getSupplierDao();
+            cartDataStore = databaseManager.getCartDao();
+            orderDataStore = databaseManager.getOrderDao();
+            customerDataStore = databaseManager.getCustomerDataDao();
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+
+        productService = new ProductService(productDataStore,productCategoryDataStore, supplierDataStore);
+        customerDataStore = CustomerDataDaoMem.getInstance();
+        engine = null;
+        context = null;
+
+    }
 
     private boolean doesCartSessionExist(HttpServletRequest req){
         HttpSession session = req.getSession();

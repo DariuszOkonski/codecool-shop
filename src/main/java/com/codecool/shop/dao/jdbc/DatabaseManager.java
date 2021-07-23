@@ -8,13 +8,12 @@ import javax.sql.DataSource;
 import java.sql.SQLException;
 
 public class DatabaseManager {
-    private static CartDao cartDao;
-    private static CustomerDataDao customerDataDao;
-    private static OrderDao orderDao;
-    private static ProductCategoryDao productCategoryDao;
-    private static ProductDao productDao;
-    private static SupplierDao supplierDao;
-
+    private CartDao cartDao;
+    private CustomerDataDao customerDataDao;
+    private OrderDao orderDao;
+    private ProductCategoryDao productCategoryDao;
+    private ProductDao productDao;
+    private SupplierDao supplierDao;
 
     public void setup() throws SQLException {
         DataSource dataSource = connect();
@@ -42,6 +41,30 @@ public class DatabaseManager {
         System.out.println("Connection ok.");
 
         return dataSource;
+    }
+
+    public CartDao getCartDao() {
+        return cartDao;
+    }
+
+    public CustomerDataDao getCustomerDataDao() {
+        return customerDataDao;
+    }
+
+    public OrderDao getOrderDao() {
+        return orderDao;
+    }
+
+    public ProductCategoryDao getProductCategoryDao() {
+        return productCategoryDao;
+    }
+
+    public ProductDao getProductDao() {
+        return productDao;
+    }
+
+    public SupplierDao getSupplierDao() {
+        return supplierDao;
     }
 
 }
