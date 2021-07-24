@@ -3,7 +3,6 @@ package com.codecool.shop.controller;
 import com.codecool.shop.model.Cart;
 import com.codecool.shop.model.CustomerData;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,7 +16,7 @@ public class CheckoutController extends BaseController {
         serviceSessionValidation(req);
         String sessionId = req.getSession().getId();
 
-        setContextVariables(cartDataStore.getByName(sessionId), sessionId);
+        setContextVariables(cartDataStore.getBySessionId(sessionId), sessionId);
 
         engine.process("product/checkout.html", context, resp.getWriter());
     }

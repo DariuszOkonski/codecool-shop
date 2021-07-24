@@ -2,7 +2,6 @@ package com.codecool.shop.controller;
 
 import com.codecool.shop.model.Cart;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,7 +15,7 @@ public class CartController extends BaseController {
         serviceSessionValidation(req);
         String sessionId = req.getSession().getId();
 
-        setContextVariables(cartDataStore.getByName(sessionId), sessionId);
+        setContextVariables(cartDataStore.getBySessionId(sessionId), sessionId);
 
         engine.process("product/cart.html", context, resp.getWriter());
     }
@@ -29,10 +28,9 @@ public class CartController extends BaseController {
         int quantity = Integer.parseInt(req.getParameter("quantity"));
 
         System.out.println(productId + quantity);
+        cartDataStore.addProduct(cartDataStore.getBySessionId(req.getSession().getId()), productDataStore.find(productId), quantity );
 
-        cartDataStore.getByName(req.getSession().getId()).addProduct(productDataStore.find(productId), quantity);
-
-        System.out.println(cartDataStore.getByName(req.getSession().getId()).toString());
+        System.out.println(cartDataStore.getBySessionId(req.getSession().getId()).toString());
 
 
         //redirect to main page

@@ -9,7 +9,8 @@ import java.util.HashMap;
 public interface CartDao {
 //    HashMap<Product, Integer> getAll();
     void add(Cart cart);
+    void addProduct(Cart cart, Product product, int quantity);
     void remove(int id);
     Cart find(int id);
-    Cart getByName(String name);
+    Cart getBySessionId(String name);
 }

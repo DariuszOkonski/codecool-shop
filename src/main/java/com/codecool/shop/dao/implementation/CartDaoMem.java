@@ -2,6 +2,7 @@ package com.codecool.shop.dao.implementation;
 
 import com.codecool.shop.dao.CartDao;
 import com.codecool.shop.model.Cart;
+import com.codecool.shop.model.Product;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ public class CartDaoMem implements CartDao {
     }
 
     @Override
-    public Cart getByName(String name) {
+    public Cart getBySessionId(String name) {
         return data.stream()
                 .filter(cart -> cart.getName().equals(name))
                 .findFirst()
@@ -33,6 +34,11 @@ public class CartDaoMem implements CartDao {
         int id = data.size() + 1;
         cart.setId(id);
         data.add(cart);
+    }
+
+    @Override
+    public void addProduct(Cart cart, Product product, int quantity) {
+        cart.addProduct(product, quantity);
     }
 
     @Override

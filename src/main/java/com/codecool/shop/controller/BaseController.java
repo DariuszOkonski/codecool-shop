@@ -51,6 +51,7 @@ public abstract class BaseController extends HttpServlet {
 
     private void setSessionCart(HttpServletRequest req) {
         String sessionId = req.getSession().getId();
+        req.getSession().setAttribute("user_id", sessionId);
         cartDataStore.add(new Cart(sessionId));
     }
 
@@ -59,7 +60,7 @@ public abstract class BaseController extends HttpServlet {
             System.out.println("Session setting");
             setSessionCart(req);
         }
-        System.out.println(req.getSession().getId());
+        System.out.println("session already set");
     }
 
     protected void setTemplateContext(HttpServletRequest req, HttpServletResponse resp) {

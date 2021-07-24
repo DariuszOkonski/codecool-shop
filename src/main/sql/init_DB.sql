@@ -252,6 +252,7 @@ CREATE TABLE cart
 (
     "id"      serial NOT NULL,
     user_id integer NOT NULL,
+    session_id text NOT NULL,
     CONSTRAINT PK_cart PRIMARY KEY ( "id" ),
     CONSTRAINT FK_93 FOREIGN KEY ( user_id ) REFERENCES "user" ( "id" )
 );
@@ -568,3 +569,4 @@ CREATE INDEX fkIdx_124 ON user_session
 
 
 INSERT INTO department (id, name) VALUES (1, 'Hardware');
+INSERT INTO "user" (id, username, password_hash) VALUES (1, 'guest', 'zaq');

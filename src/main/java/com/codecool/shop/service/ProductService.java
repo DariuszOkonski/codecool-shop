@@ -7,6 +7,7 @@ import com.codecool.shop.model.Product;
 import com.codecool.shop.model.ProductCategory;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ProductService{
     private ProductDao productDao;
@@ -36,6 +37,14 @@ public class ProductService{
     public List<Product> getProductsForSupplier(int supplierId) {
         var supplier = supplierDao.find(supplierId);
         return productDao.getBy(supplier);
+    }
+
+
+    public List<Product> getProductsForCategoryOfSupplier(int category_id, int supplier_id) {
+        List<Product> products = getProductsForCategory(category_id);
+        return products.stream()
+                .filter(product -> product.getSupplier().getId() == supplier_id)
+                .collect(Collectors.toList());
     }
 
 }

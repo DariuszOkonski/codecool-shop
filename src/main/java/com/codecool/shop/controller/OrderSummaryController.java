@@ -87,7 +87,7 @@ public class OrderSummaryController extends BaseController {
         String convertedJsonOrder = jsonService.convertData(order);
         csvFileService.saveToFile("json.csv", convertedJsonOrder);
 
-        order.getCustomerCart().cleanCart();
+        cartDataStore.remove(order.getCustomerCart().getId());
 
         System.out.println(order);
 

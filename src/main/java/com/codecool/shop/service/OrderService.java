@@ -24,7 +24,7 @@ public class OrderService {
 
     public void setNewOrderForSession(String sessionId){ // TODO change for userId
         CustomerData customerData = customerDao.getByName(sessionId);
-        Cart currentCart = cartDao.getByName(sessionId);
+        Cart currentCart = cartDao.getBySessionId(sessionId);
 
         Order order = new Order(customerData, currentCart);
         orderDao.add(order);

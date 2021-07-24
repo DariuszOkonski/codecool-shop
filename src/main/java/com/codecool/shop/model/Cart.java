@@ -7,6 +7,7 @@ import java.util.Map;
 
 public class Cart extends BaseModel {
 
+    private int userId = 1;
     private Map<Product, Integer> productsWithQuantityList = new HashMap<>();
 
     public Cart(String name) {
@@ -77,4 +78,13 @@ public class Cart extends BaseModel {
     public void cleanCart() {
         productsWithQuantityList = new HashMap<>();
     }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
 }

@@ -1,10 +1,7 @@
 package com.codecool.shop.controller;
 
-import com.codecool.shop.model.Product;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -20,7 +17,7 @@ public class DeleteItemFromCartController extends BaseController{
 
 
         cartDataStore
-                .getByName(req.getSession().getId())
+                .getBySessionId(req.getSession().getId())
                 .removeProduct(productDataStore.find(productId));
 
 //        String referrer =  req.getHeader("referer");

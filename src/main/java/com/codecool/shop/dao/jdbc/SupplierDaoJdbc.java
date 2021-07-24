@@ -1,6 +1,7 @@
 package com.codecool.shop.dao.jdbc;
 
 import com.codecool.shop.dao.SupplierDao;
+import com.codecool.shop.model.ProductCategory;
 import com.codecool.shop.model.Supplier;
 
 import javax.sql.DataSource;
@@ -8,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SupplierDaoJdbc implements SupplierDao {
@@ -36,6 +38,19 @@ public class SupplierDaoJdbc implements SupplierDao {
 
     @Override
     public Supplier find(int id) {
+        try(Connection conn = dataSource.getConnection()){
+            String sql = "SELECT * FROM supplier WHERE id=(?)";
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setInt(1, id);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                Supplier supplier = new Supplier(rs.getString(2), rs.getString(3));
+                supplier.setId(rs.getInt(1));
+                return supplier;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return null;
     }
 
@@ -46,6 +61,21 @@ public class SupplierDaoJdbc implements SupplierDao {
 
     @Override
     public List<Supplier> getAll() {
-        return null;
+        List<Supplier> suppliers = new ArrayList<>();
+        try(Connection conn = dataSource.getConnection()){
+            String sql = "SELECT * FROM supplier";
+            PreparedStatement statement = conn.prepareStatement(sql);
+            ResultSet rs = statement.executeQuery();
+            while(rs.next()){
+                Supplier supplier = new Supplier(rs.getString(2), rs.getString(3));
+                supplier.setId(rs.getInt(1));
+                suppliers.add(supplier);
+            }
+            System.out.println(suppliers);
+            return suppliers;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
