@@ -159,8 +159,7 @@ DROP TABLE IF EXISTS street;
 CREATE TABLE street
 (
     "id"              serial NOT NULL,
-    street_name     varchar(50) NOT NULL,
-    building_number varchar(50) NOT NULL,
+    street_name     text NOT NULL,
     CONSTRAINT PK_street_number PRIMARY KEY ( "id" )
 );
 

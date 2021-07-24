@@ -30,8 +30,7 @@ public class CheckoutController extends BaseController {
 
         //TODO maybe this should be moved to BaseController
         if (customerData == null) {
-            customerDataStore.add(new CustomerData(sessionId));
-            customerData = customerDataStore.getByName(sessionId);
+            customerData = new CustomerData(sessionId);
         }
 
         customerData.setCustomerName(req.getParameter("name"));
@@ -45,6 +44,9 @@ public class CheckoutController extends BaseController {
         customerData.setShippingAddressCountry(req.getParameter("shipping-country"));
         customerData.setShippingAddressCity(req.getParameter("shipping-city"));
         customerData.setShippingAddressZipCode(req.getParameter("shipping-zip-code"));
+
+        customerDataStore.add(customerData);
+
 
         //redirect
         resp.sendRedirect("/payment");

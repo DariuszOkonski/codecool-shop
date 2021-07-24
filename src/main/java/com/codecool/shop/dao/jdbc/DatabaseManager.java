@@ -32,9 +32,9 @@ public class DatabaseManager {
 
     private DataSource connect() throws SQLException {
         PGSimpleDataSource dataSource = new PGSimpleDataSource();
-        String dbName = "cc_shop";
+        String dbName = "cc-shop";
         String user = "postgres";
-        String password = "zaq12wsx";
+        String password = "Kajuta27985!!";
 
         dataSource.setDatabaseName(dbName);
         dataSource.setUser(user);
