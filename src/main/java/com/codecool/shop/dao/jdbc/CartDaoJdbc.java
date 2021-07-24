@@ -35,25 +35,36 @@ public class CartDaoJdbc implements CartDao {
     public void addProduct(Cart cart, Product product, int quantity) {
         try(Connection conn = dataSource.getConnection()){
             String sqlUpdate =
-                    "UPDATE cart_items SET product_quantity = product_quantity + (?) WHERE product_id=(?) AND cart_id=(?); ";
-            String sqlInsert =
-                    " INSERT INTO cart_items (product_id, cart_id, product_quantity) VALUES (?, ?, ?) " +
-                            "WHERE NOT EXISTS (SELECT * FROM cart_items WHERE product_id=(?) AND cart_id=(?)); ";
+                    "UPDATE cart_items SET product_quantity=? WHERE product_id=? AND cart_id=?; "+
+                    " INSERT INTO cart_items (product_id, cart_id, product_quantity) SELECT ?, ?, ? " +
+                            " WHERE NOT EXISTS (SELECT 1 FROM cart_items WHERE product_id=? AND cart_id=?); ";
+
+
             PreparedStatement statementUpdate = conn.prepareStatement(sqlUpdate);
-            PreparedStatement statementInsert = conn.prepareStatement(sqlInsert);
+//            PreparedStatement statementInsert = conn.prepareStatement(sqlInsert);
 
             statementUpdate.setInt(1, quantity);
             statementUpdate.setInt(2, product.getId());
             statementUpdate.setInt(3, cart.getId());
 
-            statementInsert.setInt(1, product.getId());
-            statementInsert.setInt(2, cart.getId());
-            statementInsert.setInt(3, quantity);
-            statementInsert.setInt(4, product.getId());
-            statementInsert.setInt(5, cart.getId());
-
+            statementUpdate.setInt(4, product.getId());
+            statementUpdate.setInt(5, cart.getId());
+            statementUpdate.setInt(6, quantity);
+            statementUpdate.setInt(7, product.getId());
+            statementUpdate.setInt(8, cart.getId());
             statementUpdate.executeUpdate();
-            statementInsert.executeUpdate();
+
+//            String sqlUpsert = "INSERT INTO cart_items (product_id, cart_id, product_quantity) VALUES (?, ?, ?) " +
+//                    "ON CONFLICT (product_id) DO UPDATE " +
+//                    "  SET product_quantity = (?) WHERE cart_items.cart_id=(?) AND cart_items.product_id=(?);";
+//            PreparedStatement statement = conn.prepareStatement(sqlUpsert);
+//            statement.setInt(1, product.getId());
+//            statement.setInt(2, cart.getId());
+//            statement.setInt(3, quantity);
+//            statement.setInt(4, quantity);
+//            statement.setInt(5, cart.getId());
+//            statement.setInt(6, product.getId());
+//            statement.executeUpdate();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

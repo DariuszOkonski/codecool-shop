@@ -48,10 +48,11 @@ public class ModifyCartController extends BaseController {
     }
 
     private void updateCart(String productId, String quantity, HttpServletRequest req) {
-        cartDataStore.getBySessionId(req.getSession()
-                .getId())
-                .modifyProductQuantity(productDataStore
-                        .find(Integer.parseInt(productId)), Integer.parseInt(quantity));
+        cartDataStore.addProduct(
+                cartDataStore.getBySessionId(req.getSession().getId()),
+                productDataStore.find(Integer.parseInt(productId)),
+                Integer.parseInt(quantity));
+
     }
 
 
