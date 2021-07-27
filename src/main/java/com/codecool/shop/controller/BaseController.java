@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.sql.SQLException;
 
 public abstract class BaseController extends HttpServlet {
     protected ProductDao productDataStore = ProductDaoMem.getInstance();
@@ -21,6 +20,7 @@ public abstract class BaseController extends HttpServlet {
     protected SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
     protected CartDao cartDataStore = CartDaoMem.getInstance();
     protected OrderDao orderDataStore = OrderDaoMem.getInstance();
+    protected UserDao userDataStore = UserDaoMem.getInstance();
 
     protected ProductService productService = null;
     protected CustomerDataDao customerDataStore = null;
@@ -35,10 +35,10 @@ public abstract class BaseController extends HttpServlet {
         cartDataStore = DatabaseManager.getINSTANCE().getCartDao();
         orderDataStore = DatabaseManager.getINSTANCE().getOrderDao();
         customerDataStore = DatabaseManager.getINSTANCE().getCustomerDataDao();
+        userDataStore = DatabaseManager.getINSTANCE().getUserDao();
 
 
         productService = new ProductService(productDataStore,productCategoryDataStore, supplierDataStore);
-        customerDataStore = CustomerDataDaoMem.getInstance();
         engine = null;
         context = null;
 
@@ -49,16 +49,20 @@ public abstract class BaseController extends HttpServlet {
         return session.getAttribute("user_id") != null;
     }
 
-    private void setSessionCart(HttpServletRequest req) {
+    void setNewCart(HttpServletRequest req) {
         String sessionId = req.getSession().getId();
-        req.getSession().setAttribute("user_id", sessionId);
-        cartDataStore.add(new Cart(sessionId));
+        int newId = userDataStore.createNewGuest();
+        req.getSession().setAttribute("user_id", newId);
+        Cart cart = new Cart(sessionId);
+        cart.setUserId(newId);
+
+        cartDataStore.add(cart);
     }
 
     protected void serviceSessionValidation(HttpServletRequest req) {
         if (!doesCartSessionExist(req)){
             System.out.println("Session setting");
-            setSessionCart(req);
+            setNewCart(req);
         }
         System.out.println("session already set");
     }

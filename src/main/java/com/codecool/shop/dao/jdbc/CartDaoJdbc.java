@@ -74,12 +74,12 @@ public class CartDaoJdbc implements CartDao {
     @Override
     public void remove(int id) {
         try(Connection conn = dataSource.getConnection()){
-            String sql = "DELETE * FROM cart_items WHERE cart_id=(?)";
+            String sql = "DELETE FROM cart_items WHERE cart_id=?";
             PreparedStatement statement = conn.prepareStatement(sql);
             statement.setInt(1, id);
             statement.executeUpdate();
 
-            String sqlCart = "DELETE * FROM cart WHERE id=(?)";
+            String sqlCart = "DELETE FROM cart WHERE id=(?)";
             PreparedStatement statementCart = conn.prepareStatement(sqlCart);
             statementCart.setInt(1, id);
             statementCart.executeUpdate();
@@ -92,19 +92,15 @@ public class CartDaoJdbc implements CartDao {
 
     @Override
     public Cart find(int id) {
-        return null;
-    }
-
-    @Override
-    public Cart getBySessionId(String name) {
         try (Connection conn = dataSource.getConnection()){
-            String sql = "SELECT * from cart where session_id=(?)";
+            String sql = "SELECT * from cart where id=(?)";
             PreparedStatement statement = conn.prepareStatement(sql);
-            statement.setString(1, name);
+            statement.setInt(1, id);
             ResultSet rs = statement.executeQuery();
             rs.next();
             Cart cart = new Cart(rs.getString(3));
             cart.setId(rs.getInt(1));
+            cart.setUserId(rs.getInt(2));
 
             String sqlItems = "SELECT product_id, product_quantity From cart_items where cart_id = (?)";
             PreparedStatement statementItems = conn.prepareStatement(sqlItems);
@@ -119,5 +115,59 @@ public class CartDaoJdbc implements CartDao {
             throwables.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public Cart getBySessionId(String name) {
+        try (Connection conn = dataSource.getConnection()){
+            String sql = "SELECT * from cart where session_id=(?)";
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setString(1, name);
+            ResultSet rs = statement.executeQuery();
+            rs.next();
+            Cart cart = new Cart(rs.getString(3));
+            cart.setId(rs.getInt(1));
+            cart.setUserId(rs.getInt(2));
+
+
+            String sqlItems = "SELECT product_id, product_quantity From cart_items where cart_id = (?)";
+            PreparedStatement statementItems = conn.prepareStatement(sqlItems);
+            statementItems.setInt(1, cart.getId());
+            ResultSet rsItems = statementItems.executeQuery();
+            while(rsItems.next()){
+                Product product = DatabaseManager.getINSTANCE().getProductDao().find(rsItems.getInt(1));
+                cart.addProduct(product, rsItems.getInt(2));
+            }
+            return cart;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public Cart getNewestOfUser(int id) {
+        try (Connection conn = dataSource.getConnection()){
+            String sql = "SELECT * from cart where user_id=(?) ORDER BY id DESC";
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setInt(1, id);
+            ResultSet rs = statement.executeQuery();
+            rs.next();
+            Cart cart = new Cart(rs.getString(3));
+            cart.setId(rs.getInt(1));
+            cart.setUserId(rs.getInt(2));
+
+            String sqlItems = "SELECT product_id, product_quantity From cart_items where cart_id = (?)";
+            PreparedStatement statementItems = conn.prepareStatement(sqlItems);
+            statementItems.setInt(1, cart.getId());
+            ResultSet rsItems = statementItems.executeQuery();
+            while(rsItems.next()){
+                Product product = DatabaseManager.getINSTANCE().getProductDao().find(rsItems.getInt(1));
+                cart.addProduct(product, rsItems.getInt(2));
+            }
+            return cart;
+        } catch (SQLException throwables) {
+            return null;
+        }
     }
 }

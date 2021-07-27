@@ -27,7 +27,7 @@ public class OrderSummaryController extends BaseController {
 
         //        System.out.println(req.getSession().getAttribute("processed_order") + " PRCESSD ORDER ");
         // TODO MOVE FROM SESSION ID BASED PROCESSING TO SETTING ORDER ID IN SESSION
-        int orderId = Integer.parseInt(req.getParameter("order_id"));
+        int orderId = (int) req.getSession().getAttribute("order_id");
         order = orderDataStore.find(orderId);
 
         emailService = new EmailService();
@@ -35,16 +35,17 @@ public class OrderSummaryController extends BaseController {
         csvFileService = new CSVFileService();
 
         if(order == null) {
-            sendErrorOrder(resp);
+            sendErrorOrder(resp, req);
         }else if(!order.isPaymentSuccessfull()) {
             try {
-                sendFailedOrder(resp);
+                sendFailedOrder(resp, req);
             } catch (MessagingException e) {
                 e.printStackTrace();
             }
         } else {
             try {
-                sendSuccessfulOrder(resp);
+                sendSuccessfulOrder(resp, req);
+                setNewCart(req);
             } catch (MessagingException e) {
                 e.printStackTrace();
             }
@@ -52,16 +53,16 @@ public class OrderSummaryController extends BaseController {
 
     }
 
-    private void sendErrorOrder(HttpServletResponse resp) throws IOException {
+    private void sendErrorOrder(HttpServletResponse resp, HttpServletRequest req) throws IOException {
         System.out.println("--- ERROR ---");
         String status = "ERROR";
         String message = "Some Error occurred";
         String orderNumber = "No number";
-        setContextVariables(status, message, orderNumber);
+        setContextVariables(status, message, orderNumber, req);
         engine.process("product/orderSummary.html", context, resp.getWriter());
     }
 
-    private void sendFailedOrder(HttpServletResponse resp) throws IOException, MessagingException {
+    private void sendFailedOrder(HttpServletResponse resp, HttpServletRequest req) throws IOException, MessagingException {
         System.out.println("--- ORDER DENIED ---");
         String status = "ORDER DENIED";
         String message = "No Payment has been made";
@@ -72,11 +73,11 @@ public class OrderSummaryController extends BaseController {
         emailService.sendConfirmation(orderNumber, message, email);
 
         // display page with payment refusal and error details, and possibility to return to basket or to main page
-        setContextVariables(status, message, orderNumber);
+        setContextVariables(status, message, orderNumber, req);
         engine.process("product/orderSummary.html", context, resp.getWriter());
     }
 
-    private void sendSuccessfulOrder(HttpServletResponse resp) throws IOException, MessagingException {
+    private void sendSuccessfulOrder(HttpServletResponse resp, HttpServletRequest req) throws IOException, MessagingException {
         System.out.println("--- ORDER SUCCESSFULL ---");
         String status = "ORDER ACCEPTED";
         String message = "Payment has been successfull";
@@ -86,21 +87,22 @@ public class OrderSummaryController extends BaseController {
         // if ok, save order to json file
         String convertedJsonOrder = jsonService.convertData(order);
         csvFileService.saveToFile("json.csv", convertedJsonOrder);
-
-        cartDataStore.remove(order.getCustomerCart().getId());
-
         System.out.println(order);
 
         // logic to send email that payment was ok
         emailService.sendConfirmation(orderNumber, message, email);
 
         // dispaly page with conformation and details of the order, and possibility to get back to main page
-        setContextVariables(status, message, orderNumber);
+        setContextVariables(status, message, orderNumber, req);
         engine.process("product/orderSummary.html", context, resp.getWriter());
     }
 
-    private void setContextVariables(String status, String message, String orderNumber) {
+    private void setContextVariables(String status, String message, String orderNumber, HttpServletRequest req) {
         context.setVariable("status", status);
+        context.setVariable("itemsInCart",
+                cartDataStore
+                        .getNewestOfUser((int)req.getSession().getAttribute("user_id"))
+                        .getTotalProductCount());
         context.setVariable("message", message);
         context.setVariable("orderNumber", orderNumber);
     }

@@ -2,12 +2,29 @@ package com.codecool.shop.dao.implementation;
 
 import com.codecool.shop.dao.OrderDao;
 import com.codecool.shop.model.Order;
+import com.codecool.shop.model.payment.PaymentMethods;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class OrderDaoMem implements OrderDao {
     private List<Order> data = new ArrayList<>();
+
+    @Override
+    public Order getNewestOfUser(int userId) {
+        return data.stream()
+                .filter(order -> order.getUserId() == userId)
+                .sorted(Collections.reverseOrder())
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
+    public void setPaymentStatus(Order ord, boolean paymentPossible) {
+        ord.setPaymentSuccessfull(paymentPossible);
+    }
+
     private static OrderDaoMem instance = null;
 
     private OrderDaoMem() {
@@ -32,6 +49,14 @@ public class OrderDaoMem implements OrderDao {
     public void remove(int id) {
         data.remove(find(id));
     }
+
+    @Override
+    public void setPaymentMethod(Order ord, String method) {
+        ord.setPayment(
+                PaymentMethods.build(method, ord.getCustomerCart().getSumPrice(), ord.getId())
+        );
+    }
+
     @Override
     public Order find(int id) {
         return data.stream().filter(t -> t.getId() == id).findFirst().orElse(null);

@@ -67,7 +67,7 @@ public class Initializer implements ServletContextListener {
 
 //            cartDataStore.add(new Cart("temporary"));
         }
-
+        System.out.println("http://localhost:8080");
     }
 
 

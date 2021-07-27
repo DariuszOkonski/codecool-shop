@@ -8,9 +8,8 @@ public class TransferPayment extends Payment{
     private final String companyAccountNumber = "123412341234123412341234";
     private final String companyName = "Codecool Sp. z o.o.";
 
-
-    public TransferPayment(BigDecimal amountToPay, String userSessionId) {
-        super(amountToPay, userSessionId);
+    public TransferPayment(BigDecimal amountToPay, String methodName, int ordId) {
+        super(amountToPay, methodName, ordId);
         transferTitle = getName() + LocalDateTime.now();
     }
 

@@ -5,6 +5,7 @@ import com.codecool.shop.model.Cart;
 import com.codecool.shop.model.Product;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class CartDaoMem implements CartDao {
@@ -49,5 +50,14 @@ public class CartDaoMem implements CartDao {
     @Override
     public Cart find(int id) {
         return data.stream().filter(t -> t.getId() == id).findFirst().orElse(null);
+    }
+
+    @Override
+    public Cart getNewestOfUser(int id) {
+        return data.stream()
+                .filter(cart -> cart.getUserId() == id)
+                .sorted(Collections.reverseOrder())
+                .findFirst()
+                .orElse(null);
     }
 }

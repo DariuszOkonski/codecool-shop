@@ -18,6 +18,8 @@ public class DatabaseManager {
     private ProductCategoryDao productCategoryDao;
     private ProductDao productDao;
     private SupplierDao supplierDao;
+    private UserDao userDao;
+
 
     public void setup() throws SQLException {
         DataSource dataSource = connect();
@@ -27,14 +29,15 @@ public class DatabaseManager {
         productCategoryDao = new ProductCategoryDaoJdbc(dataSource);
         productDao = new ProductDaoJdbc(dataSource);
         supplierDao = new SupplierDaoJdbc(dataSource);
+        userDao = new UserDaoJdbc(dataSource);
 
     }
 
     private DataSource connect() throws SQLException {
         PGSimpleDataSource dataSource = new PGSimpleDataSource();
-        String dbName = "cc-shop";
+        String dbName = "cc_shop";
         String user = "postgres";
-        String password = "...";
+        String password = "zaq12wsx";
 
         dataSource.setDatabaseName(dbName);
         dataSource.setUser(user);
@@ -84,4 +87,7 @@ public class DatabaseManager {
         return supplierDao;
     }
 
+    public UserDao getUserDao() {
+        return userDao;
+    }
 }

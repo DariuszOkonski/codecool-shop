@@ -17,27 +17,28 @@ import java.math.BigDecimal;
 
 @WebServlet(urlPatterns = {"/payment"})
 public class PaymentController extends BaseController{
+    int userId;
     private OrderService orderService = new OrderService(cartDataStore, orderDataStore, customerDataStore);
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         setTemplateContext(req, resp);
         serviceSessionValidation(req);
-
+        userId = (int)req.getSession().getAttribute("user_id");
         String currentSession = req.getSession().getId();
 
-        if (orderService.ordersExists(currentSession))
-            orderService.setNewOrderForSession(currentSession);
+        if (orderService.hasNotPendingOrder(userId))
+            orderService.setFreshOrderForUser(userId);
 
-        Order order = orderService.findOrder(currentSession);
+        Order order = orderService.getNewestOrder(userId);
 
         //TODO futures artifact
-        req.getSession().setAttribute("processed_order", order.getId());
+        req.getSession().setAttribute("order_id", order.getId());
 
         BigDecimal amountToPay = order.getCustomerCart().getSumPrice();
         String chosenPaymentMethod = req.getParameter("method");
         if (chosenPaymentMethod != null) {
-            PaymentMethod paymentMethod = PaymentMethods.build(chosenPaymentMethod, amountToPay, currentSession);
-            order.setPayment(paymentMethod);
+            PaymentMethod paymentMethod = PaymentMethods.build(chosenPaymentMethod, amountToPay, order.getId());
+            orderDataStore.setPaymentMethod(order, paymentMethod.getName());
         }
         setContextVariables(currentSession, amountToPay, chosenPaymentMethod, order.getCustomerCart().getSumPrice(), order.getCustomerCart());
 
@@ -67,13 +68,13 @@ public class PaymentController extends BaseController{
         String cvv = req.getParameter("cvv");
         CreditCard card = new CreditCard(cardNumber, expYear, expMonth, cvv);
 
-        Order ord = orderService.findOrder(req.getSession().getId());
+        Order ord = orderService.getNewestOrder(userId);
         BigDecimal sumPrice = ord.getCustomerCart().getSumPrice();
 
         boolean paymentPossible = card.isPaymentPossible(sumPrice);
         if(paymentPossible) card.decreaseFunds(sumPrice);
 
-        ord.setPaymentSuccessfull(paymentPossible);
+        orderDataStore.setPaymentStatus(ord, paymentPossible);
 
         // TODO MOVE FROM SESSION ID BASED PROCESSING TO SETTING ORDER ID IN SESSION
             //redirect to main page

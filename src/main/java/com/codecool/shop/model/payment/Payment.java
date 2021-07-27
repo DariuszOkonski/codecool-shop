@@ -9,8 +9,19 @@ public abstract class Payment extends BaseModel implements PaymentMethod{
     private boolean finished;
     private BigDecimal amountToPay;
 
-    public Payment(BigDecimal amountToPay, String userSessionId) {
-        super(userSessionId);
+    public BigDecimal getAmountToPay() {
+        return amountToPay;
+    }
+
+    public int getOrderId() {
+        return orderId;
+    }
+
+    private int orderId;
+
+    public Payment(BigDecimal amountToPay, String methodName, int ordId) {
+        super(methodName);
+        this.orderId = ordId;
         this.amountToPay = amountToPay;
     }
 

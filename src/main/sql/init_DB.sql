@@ -435,6 +435,7 @@ CREATE TABLE customer_data
     customer_email        varchar(50) NOT NULL,
     customer_name         varchar(50) NOT NULL,
     customer_phone_number varchar(50) NOT NULL,
+    session_id        text NOT NULL,
     CONSTRAINT PK_customer_data PRIMARY KEY ( "id" ),
     CONSTRAINT FK_145 FOREIGN KEY ( user_id ) REFERENCES "user" ( "id" ),
     CONSTRAINT FK_254 FOREIGN KEY ( billing_address_id ) REFERENCES address ( "id" ),
@@ -495,9 +496,10 @@ CREATE TABLE "order"
 (
     "id"              serial NOT NULL,
     cart_id         integer NOT NULL,
-    order_status_id integer NOT NULL,
+    order_status_id integer,
     user_id         integer NOT NULL,
     order_number    text NOT NULL,
+    payment_method    varchar(20),
     CONSTRAINT PK_order PRIMARY KEY ( "id" ),
     CONSTRAINT FK_106 FOREIGN KEY ( cart_id ) REFERENCES cart ( "id" ),
     CONSTRAINT FK_109 FOREIGN KEY ( user_id ) REFERENCES "user" ( "id" ),
@@ -569,3 +571,8 @@ CREATE INDEX fkIdx_124 ON user_session
 
 INSERT INTO department (id, name) VALUES (1, 'Hardware');
 INSERT INTO "user" (id, username, password_hash) VALUES (1, 'guest', 'zaq');
+INSERT INTO order_status VALUES (1, 'Not finished');
+INSERT INTO order_status VALUES (2, 'Finished');
+SELECT pg_catalog.setval('user_id_seq', 2, true);
+SELECT pg_catalog.setval('order_status_id_seq', 3, true);
+

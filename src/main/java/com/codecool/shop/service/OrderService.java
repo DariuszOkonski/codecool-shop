@@ -18,20 +18,25 @@ public class OrderService {
         this.customerDao = customerDao;
     }
 
-    public boolean ordersExists(String sessionId){ // TODO change for userId/orderId
-        return orderDao.getByName(sessionId) == null;
+    public boolean hasNotPendingOrder(int userId){ // TODO change for userId/orderId
+        try {
+            Order newestOrder = orderDao.getNewestOfUser(userId);
+            return newestOrder.isPaymentSuccessfull() == false && newestOrder.getPayment() == null;
+        } catch (NullPointerException e){
+            return true;
+        }
     }
 
-    public void setNewOrderForSession(String sessionId){ // TODO change for userId
-        CustomerData customerData = customerDao.getByName(sessionId);
-        Cart currentCart = cartDao.getBySessionId(sessionId);
+    public void setFreshOrderForUser(int userId){ // TODO change for userId
+        CustomerData customerData = customerDao.find(userId);
+        Cart currentCart = cartDao.getNewestOfUser(userId);
 
         Order order = new Order(customerData, currentCart);
         orderDao.add(order);
     }
 
-    public Order findOrder(String sessionId) { // TODO Find freshest order for userId??
-        return orderDao.getByName(sessionId);
+    public Order getNewestOrder(int userId) { // TODO Find freshest order for userId??
+        return orderDao.getNewestOfUser(userId);
     }
 
 }

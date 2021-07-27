@@ -6,8 +6,8 @@ public class CreditCardPayment extends Payment{
     private CreditCard card;
 
 
-    public CreditCardPayment(BigDecimal amountToPay, String userSessionId) {
-        super(amountToPay, userSessionId);
+    public CreditCardPayment(BigDecimal amountToPay, String methodName, int ordId) {
+        super(amountToPay, methodName, ordId);
     }
 
     public void setCard(CreditCard card) {

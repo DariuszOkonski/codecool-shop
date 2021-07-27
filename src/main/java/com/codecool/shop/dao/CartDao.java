@@ -12,5 +12,6 @@ public interface CartDao {
     void addProduct(Cart cart, Product product, int quantity);
     void remove(int id);
     Cart find(int id);
+    Cart getNewestOfUser(int id);
     Cart getBySessionId(String name);
 }

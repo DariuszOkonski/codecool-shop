@@ -12,6 +12,7 @@ public class CustomerData extends BaseModel {
     private String shippingAddressCountry;
     private String shippingAddressCity;
     private String shippingAddressZipCode;
+    private int userId;
 
     public CustomerData(String id) {
         super(id);
@@ -104,4 +105,13 @@ public class CustomerData extends BaseModel {
     public void setShippingAddressZipCode(String shippingAddressZipCode) {
         this.shippingAddressZipCode = shippingAddressZipCode;
     }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
 }

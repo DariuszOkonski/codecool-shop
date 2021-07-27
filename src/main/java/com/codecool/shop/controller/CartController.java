@@ -13,9 +13,10 @@ public class CartController extends BaseController {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         setTemplateContext(req, resp);
         serviceSessionValidation(req);
+        int userId = (int) req.getSession().getAttribute("user_id");
         String sessionId = req.getSession().getId();
 
-        setContextVariables(cartDataStore.getBySessionId(sessionId), sessionId);
+        setContextVariables(cartDataStore.getNewestOfUser(userId), sessionId);
 
         engine.process("product/cart.html", context, resp.getWriter());
     }
@@ -26,12 +27,9 @@ public class CartController extends BaseController {
         serviceSessionValidation(req);
         int productId = Integer.parseInt(req.getParameter("product_id"));
         int quantity = Integer.parseInt(req.getParameter("quantity"));
+        int user_id = (int) req.getSession().getAttribute("user_id");
 
-        System.out.println(productId + quantity);
-        cartDataStore.addProduct(cartDataStore.getBySessionId(req.getSession().getId()), productDataStore.find(productId), quantity );
-
-        System.out.println(cartDataStore.getBySessionId(req.getSession().getId()).toString());
-
+        cartDataStore.addProduct(cartDataStore.getNewestOfUser(user_id), productDataStore.find(productId), quantity );
 
         //redirect to main page
         String referrer = req.getHeader("referer");

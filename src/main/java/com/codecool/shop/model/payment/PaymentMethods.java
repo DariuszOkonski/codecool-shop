@@ -15,14 +15,14 @@ public enum PaymentMethods {
         this.url = url;
     }
 
-    public static PaymentMethod build(String url, BigDecimal amountToPay, String userSessionId){
+    public static PaymentMethod build(String url, BigDecimal amountToPay, int ordId){
         switch(url) {
             case "credit-card":
-                return new CreditCardPayment(amountToPay, userSessionId);
+                return new CreditCardPayment(amountToPay, url, ordId);
             case "transfer":
-                return new TransferPayment(amountToPay, userSessionId);
+                return new TransferPayment(amountToPay, url, ordId);
             case "paypal":
-                return new PayPalPayment(amountToPay, userSessionId);
+                return new PayPalPayment(amountToPay, url, ordId);
             default:
                 return null;
         }

@@ -3,8 +3,8 @@ package com.codecool.shop.model.payment;
 import java.math.BigDecimal;
 
 public class PayPalPayment extends Payment{
-    public PayPalPayment(BigDecimal amountToPay, String userSessionId) {
-        super(amountToPay, userSessionId);
+    public PayPalPayment(BigDecimal amountToPay, String methodName, int ordId) {
+        super(amountToPay, methodName, ordId);
     }
 
     @Override

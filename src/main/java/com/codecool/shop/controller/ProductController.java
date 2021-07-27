@@ -1,6 +1,7 @@
 package com.codecool.shop.controller;
 
 import com.codecool.shop.dao.ProductCategoryDao;
+import com.codecool.shop.model.Cart;
 import com.codecool.shop.model.Product;
 import com.codecool.shop.model.Supplier;
 import com.codecool.shop.service.ProductService;
@@ -38,8 +39,8 @@ public class ProductController extends BaseController {
         }else if (supplierProvided) {
             products = productService.getProductsForSupplier(supplier_id);
         }
-
-        int totalInCart = cartDataStore.getBySessionId(req.getSession().getId()).getTotalProductCount();
+        Cart cart = cartDataStore.getNewestOfUser((int)req.getSession().getAttribute("user_id"));
+        int totalInCart = cart.getTotalProductCount();
 
         setContextVariables(productCategoryDataStore, productService, context, category_id, products, suppliers, req.getSession().getId(), totalInCart, supplier_id);
 

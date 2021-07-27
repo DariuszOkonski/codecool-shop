@@ -20,8 +20,11 @@ public class Order extends BaseModel {
         this.isPaymentSuccessfull = false; // TODO: remove
     }
 
+    public int getUserId(){
+        return customerData.getUserId();
+    }
     public boolean isPaymentSuccessfull() {
-        return isPaymentSuccessfull;
+        return payment.isFinished();
     }
 
     public void setPaymentSuccessfull(boolean paymentSuccessfull) {
