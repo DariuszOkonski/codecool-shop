@@ -37,7 +37,8 @@ public class DatabaseManager {
         PGSimpleDataSource dataSource = new PGSimpleDataSource();
         String dbName = "cc_shop";
         String user = "postgres";
-        String password = "zaq12wsx";
+//        String password = "zaq12wsx";
+        String password = "darek200180";
 
         dataSource.setDatabaseName(dbName);
         dataSource.setUser(user);

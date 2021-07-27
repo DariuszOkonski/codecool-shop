@@ -49,6 +49,7 @@ public abstract class BaseController extends HttpServlet {
         return session.getAttribute("user_id") != null;
     }
 
+    // TODO: bug is here, to fix not to set new quest after successful payment
     void setNewCart(HttpServletRequest req) {
         String sessionId = req.getSession().getId();
         int newId = userDataStore.createNewGuest();

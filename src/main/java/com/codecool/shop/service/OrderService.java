@@ -21,7 +21,7 @@ public class OrderService {
     public boolean hasNotPendingOrder(int userId){ // TODO change for userId/orderId
         try {
             Order newestOrder = orderDao.getNewestOfUser(userId);
-            return newestOrder.isPaymentSuccessfull() == false && newestOrder.getPayment() == null;
+            return newestOrder.getPayment() != null && newestOrder.isPaymentSuccessfull() != false;
         } catch (NullPointerException e){
             return true;
         }
