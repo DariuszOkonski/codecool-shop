@@ -573,6 +573,9 @@ INSERT INTO department (id, name) VALUES (1, 'Hardware');
 INSERT INTO "user" (id, username, password_hash) VALUES (1, 'guest', 'zaq');
 INSERT INTO order_status VALUES (1, 'Not finished');
 INSERT INTO order_status VALUES (2, 'Finished');
-SELECT pg_catalog.setval('user_id_seq', 2, true);
+SELECT pg_catalog.setval('user_id_seq', 1, true);
 SELECT pg_catalog.setval('order_status_id_seq', 3, true);
 
+
+
+SELECT MAX(id) as id FROM public.user;
