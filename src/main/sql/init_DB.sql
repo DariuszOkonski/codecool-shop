@@ -577,5 +577,8 @@ SELECT pg_catalog.setval('user_id_seq', 1, true);
 SELECT pg_catalog.setval('order_status_id_seq', 3, true);
 
 
+-- Prototypes queries
+-- SELECT MAX(id) as id FROM public.user;
 
-SELECT MAX(id) as id FROM public.user;
+-- SELECT PRODUCT ITEMS FROM CART
+-- select * from cart_items inner join cart on cart.id = cart_items.cart_id inner join product on product.id = cart_items.product_id;

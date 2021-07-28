@@ -50,10 +50,15 @@ public abstract class BaseController extends HttpServlet {
     }
 
     // TODO: bug is here, to fix not to set new quest after successful payment
-    void setNewCart(HttpServletRequest req) {
-        String sessionId = req.getSession().getId();
+    void createNewGuest(HttpServletRequest req) {
         int newId = userDataStore.createNewGuest();
         req.getSession().setAttribute("user_id", newId);
+    }
+
+    void setNewCart(HttpServletRequest req) {
+        String sessionId = req.getSession().getId();
+        int newId = (int)req.getSession().getAttribute("user_id");
+//        req.getSession().setAttribute("user_id", newId);
         Cart cart = new Cart(sessionId);
         cart.setUserId(newId);
 
@@ -63,6 +68,7 @@ public abstract class BaseController extends HttpServlet {
     protected void serviceSessionValidation(HttpServletRequest req) {
         if (!doesCartSessionExist(req)){
             System.out.println("Session setting");
+            createNewGuest(req);
             setNewCart(req);
         }
         System.out.println("session already set");
