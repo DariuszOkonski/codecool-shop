@@ -10,6 +10,7 @@ public interface CartDao {
 //    HashMap<Product, Integer> getAll();
     void add(Cart cart);
     void addProduct(Cart cart, Product product, int quantity);
+    void removeProduct(Cart cart, Product product);
     void remove(int id);
     Cart find(int id);
     Cart getNewestOfUser(int id);

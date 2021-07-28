@@ -5,6 +5,7 @@ import com.codecool.shop.dao.*;
 import com.codecool.shop.dao.implementation.*;
 import com.codecool.shop.dao.jdbc.DatabaseManager;
 import com.codecool.shop.model.Cart;
+import com.codecool.shop.service.CartService;
 import com.codecool.shop.service.ProductService;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -26,6 +27,7 @@ public abstract class BaseController extends HttpServlet {
     protected CustomerDataDao customerDataStore = null;
     protected TemplateEngine engine = null;
     protected WebContext context = null;
+    protected CartService cartService = null;
 
     public BaseController() {
 
@@ -41,6 +43,7 @@ public abstract class BaseController extends HttpServlet {
         productService = new ProductService(productDataStore,productCategoryDataStore, supplierDataStore);
         engine = null;
         context = null;
+        cartService = new CartService(cartDataStore, productDataStore);
 
     }
 

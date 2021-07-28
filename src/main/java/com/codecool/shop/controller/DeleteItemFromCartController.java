@@ -16,9 +16,8 @@ public class DeleteItemFromCartController extends BaseController{
         int productId = Integer.parseInt(req.getParameter("product_id"));
 
 
-        cartDataStore
-                .getBySessionId(req.getSession().getId())
-                .removeProduct(productDataStore.find(productId));
+        int user_id = (int)req.getSession().getAttribute("user_id");
+        cartService.removeProduct(productId, user_id);
 
 //        String referrer =  req.getHeader("referer");
         resp.sendRedirect("/cart");
