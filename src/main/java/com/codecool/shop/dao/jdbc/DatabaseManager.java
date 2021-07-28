@@ -3,9 +3,11 @@ package com.codecool.shop.dao.jdbc;
 import com.codecool.shop.dao.*;
 import com.codecool.shop.dao.implementation.CartDaoMem;
 import com.codecool.shop.model.ProductCategory;
+import com.codecool.shop.service.ConfigService;
 import org.postgresql.ds.PGSimpleDataSource;
 
 import javax.sql.DataSource;
+import java.io.IOException;
 import java.sql.SQLException;
 
 public class DatabaseManager {
@@ -21,7 +23,7 @@ public class DatabaseManager {
     private UserDao userDao;
 
 
-    public void setup() throws SQLException {
+    public void setup() throws SQLException, IOException {
         DataSource dataSource = connect();
         cartDao = new CartDaoJdbc(dataSource);
         customerDataDao = new CustomerDataDaoJdbc(dataSource);
@@ -33,12 +35,13 @@ public class DatabaseManager {
 
     }
 
-    private DataSource connect() throws SQLException {
+    private DataSource connect() throws SQLException, IOException {
         PGSimpleDataSource dataSource = new PGSimpleDataSource();
-        String dbName = "cc_shop";
-        String user = "postgres";
-//        String password = "zaq12wsx";
-        String password = "darek200180";
+        ConfigService configService = new ConfigService();
+
+        String dbName = configService.getDatabaseName();
+        String user = configService.getDatabaseUser();
+        String password = configService.getDatabasePassword();
 
         dataSource.setDatabaseName(dbName);
         dataSource.setUser(user);
@@ -57,7 +60,7 @@ public class DatabaseManager {
             INSTANCE = new DatabaseManager();
             try {
                 INSTANCE.setup();
-            } catch (SQLException throwables) {
+            } catch (SQLException | IOException throwables) {
                 throwables.printStackTrace();
             }
         }
