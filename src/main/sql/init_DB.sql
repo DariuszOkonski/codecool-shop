@@ -548,6 +548,8 @@ CREATE TABLE user_session
     "id"                 serial NOT NULL,
     user_id            integer NOT NULL,
     session_expiration timestamp NOT NULL,
+    session_token text UNIQUE,
+
     CONSTRAINT PK_user_session PRIMARY KEY ( "id" ),
     CONSTRAINT FK_123 FOREIGN KEY ( user_id ) REFERENCES "user" ( "id" )
 );
