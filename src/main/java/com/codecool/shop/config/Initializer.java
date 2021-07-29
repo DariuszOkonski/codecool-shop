@@ -9,29 +9,45 @@ import com.codecool.shop.dao.implementation.ProductCategoryDaoMem;
 import com.codecool.shop.dao.implementation.ProductDaoMem;
 import com.codecool.shop.dao.implementation.SupplierDaoMem;
 import com.codecool.shop.dao.jdbc.DatabaseManager;
-import com.codecool.shop.model.Cart;
 import com.codecool.shop.model.Product;
 import com.codecool.shop.model.ProductCategory;
 import com.codecool.shop.model.Supplier;
+import com.codecool.shop.service.ConfigService;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
+import java.io.IOException;
 
 @WebListener
 public class Initializer implements ServletContextListener {
+    private ProductDao productDataStore;
+    private ProductCategoryDao productCategoryDataStore;
+    private SupplierDao supplierDataStore;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-//        ProductDao productDataStore = ProductDaoMem.getInstance();
-//        ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
-//        SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
-//        CartDao cartDataStore = CartDaoMem.getInstance();
 
-        ProductDao productDataStore = DatabaseManager.getINSTANCE().getProductDao();
-        ProductCategoryDao productCategoryDataStore = DatabaseManager.getINSTANCE().getProductCategoryDao();
-        SupplierDao supplierDataStore = DatabaseManager.getINSTANCE().getSupplierDao();
-        CartDao cartDataStore = DatabaseManager.getINSTANCE().getCartDao();
+        ConfigService configService = new ConfigService();
+
+        try {
+            if (configService.getDaoType().equals("jdbc")) {
+                productDataStore = DatabaseManager.getINSTANCE().getProductDao();
+                productCategoryDataStore = DatabaseManager.getINSTANCE().getProductCategoryDao();
+                supplierDataStore = DatabaseManager.getINSTANCE().getSupplierDao();
+            } else {
+                productDataStore = ProductDaoMem.getInstance();
+                productCategoryDataStore = ProductCategoryDaoMem.getInstance();
+                supplierDataStore = SupplierDaoMem.getInstance();
+            }
+        } catch (IOException e) {
+            //TODO LOG EXCEPTION
+            System.out.println(e);
+        }
+
+
+
+
 
         //setting up a new supplier
         if (productCategoryDataStore.getAll().size() == 0 && productDataStore.getAll().size() == 0 && supplierDataStore.getAll().size() == 0){
@@ -73,4 +89,3 @@ public class Initializer implements ServletContextListener {
 
 }
 
-// check if session ? create new Cart : cart istnieje

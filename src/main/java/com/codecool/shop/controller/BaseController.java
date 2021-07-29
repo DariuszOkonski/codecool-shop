@@ -6,6 +6,7 @@ import com.codecool.shop.dao.implementation.*;
 import com.codecool.shop.dao.jdbc.DatabaseManager;
 import com.codecool.shop.model.Cart;
 import com.codecool.shop.service.CartService;
+import com.codecool.shop.service.ConfigService;
 import com.codecool.shop.service.ProductService;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 public abstract class BaseController extends HttpServlet {
     protected ProductDao productDataStore = ProductDaoMem.getInstance();
@@ -28,16 +30,20 @@ public abstract class BaseController extends HttpServlet {
     protected TemplateEngine engine = null;
     protected WebContext context = null;
     protected CartService cartService = null;
+    protected ConfigService configService = new ConfigService();
 
     public BaseController() {
 
-        productDataStore = DatabaseManager.getINSTANCE().getProductDao();
-        productCategoryDataStore = DatabaseManager.getINSTANCE().getProductCategoryDao();
-        supplierDataStore = DatabaseManager.getINSTANCE().getSupplierDao();
-        cartDataStore = DatabaseManager.getINSTANCE().getCartDao();
-        orderDataStore = DatabaseManager.getINSTANCE().getOrderDao();
-        customerDataStore = DatabaseManager.getINSTANCE().getCustomerDataDao();
-        userDataStore = DatabaseManager.getINSTANCE().getUserDao();
+        try {
+            if (configService.getDaoType().equals("jdbc")) {
+                setDatabaseDao();
+            } else {
+                setMemoryDao();
+            }
+        } catch (IOException e) {
+            //TODO LOG EXCEPTION
+            System.out.println(e);
+        }
 
 
         productService = new ProductService(productDataStore,productCategoryDataStore, supplierDataStore);
@@ -45,6 +51,25 @@ public abstract class BaseController extends HttpServlet {
         context = null;
         cartService = new CartService(cartDataStore, productDataStore);
 
+    }
+
+    private void setDatabaseDao() {
+        productDataStore = DatabaseManager.getINSTANCE().getProductDao();
+        productCategoryDataStore = DatabaseManager.getINSTANCE().getProductCategoryDao();
+        supplierDataStore = DatabaseManager.getINSTANCE().getSupplierDao();
+        cartDataStore = DatabaseManager.getINSTANCE().getCartDao();
+        orderDataStore = DatabaseManager.getINSTANCE().getOrderDao();
+        customerDataStore = DatabaseManager.getINSTANCE().getCustomerDataDao();
+        userDataStore = DatabaseManager.getINSTANCE().getUserDao();
+    }
+
+    private void setMemoryDao() {
+        productDataStore = ProductDaoMem.getInstance();
+        productCategoryDataStore = ProductCategoryDaoMem.getInstance();
+        supplierDataStore = SupplierDaoMem.getInstance();
+        cartDataStore = CartDaoMem.getInstance();
+        orderDataStore = OrderDaoMem.getInstance();
+        userDataStore = UserDaoMem.getInstance();
     }
 
     private boolean doesCartSessionExist(HttpServletRequest req){
