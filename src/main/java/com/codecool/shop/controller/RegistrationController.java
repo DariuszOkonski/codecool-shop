@@ -25,10 +25,20 @@ public class RegistrationController extends BaseController {
 
         @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        // TODO get data from form
-        // TODO make register service (hash password)
-        // TODO add to database
-        // TODO alter table user add email field
+            String user = req.getParameter("username");
+            String email = req.getParameter("email");
+            String password = req.getParameter("password");
+
+
+
+            // TODO check if user exists in db by email
+            // ToDO if exist display message
+
+
+            resp.sendRedirect("/registration");
+            // TODO make register service (hash password)
+            // TODO add to database
+            // TODO alter table user add email field
             // TODO redirect to main page
     }
 

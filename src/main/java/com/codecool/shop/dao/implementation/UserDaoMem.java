@@ -20,12 +20,12 @@ public class UserDaoMem implements UserDao {
     @Override
     public int createNewGuest() {
         int nextId = users.size()+1;
-        add(String.format("guest%d", nextId), "");
+        add(String.format("guest%d", nextId), "abx@abc", "");
         return nextId;
     }
 
     @Override
-    public void add(String name, String password) {
+    public void add(String name, String email, String password) {
         User user = new User(name, password);
         user.setId(users.size() + 1);
         users.add(user);
@@ -45,5 +45,17 @@ public class UserDaoMem implements UserDao {
                 .filter(user -> user.getId() == userId)
                 .findFirst()
                 .orElse(null);
+    }
+
+    @Override
+    public boolean doesGivenEmailExists(String email) {
+        // TODO - write queries to singleton
+        return false;
+    }
+
+    @Override
+    public boolean doesGivenUserExists(String user) {
+        // TODO - write queries to singleton
+        return false;
     }
 }

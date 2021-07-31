@@ -224,8 +224,9 @@ DROP TABLE IF EXISTS "user";
 CREATE TABLE "user"
 (
     "id"            serial NOT NULL,
-    username      varchar(50) NOT NULL,
+    username      varchar(50) UNIQUE NOT NULL,
     password_hash varchar(50) NOT NULL,
+    email         varchar (50) UNIQUE NOT NULL,
     CONSTRAINT PK_user PRIMARY KEY ( "id" )
 );
 
@@ -572,7 +573,7 @@ CREATE INDEX fkIdx_124 ON user_session
 
 
 INSERT INTO department (id, name) VALUES (1, 'Hardware');
-INSERT INTO "user" (id, username, password_hash) VALUES (1, 'guest', 'zaq');
+INSERT INTO "user" (id, username, email, password_hash) VALUES (1, 'guest', 'abc@abc', 'zaq');
 INSERT INTO order_status VALUES (1, 'Not finished');
 INSERT INTO order_status VALUES (2, 'Finished');
 SELECT pg_catalog.setval('user_id_seq', 1, true);

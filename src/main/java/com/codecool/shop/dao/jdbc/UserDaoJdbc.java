@@ -18,19 +18,20 @@ public class UserDaoJdbc implements UserDao {
     @Override
     public int createNewGuest() {
         int nextId=getNextId();
-        add(String.format("guest%d", nextId), "");
+        add(String.format("guest%d", nextId), "abx@abc", "");
         return nextId;
     }
 
     @Override
-    public void add(String name, String password) {
+    public void add(String name, String email, String password) {
         try(Connection conn = ds.getConnection()){
-            String sql = "INSERT  INTO public.\"user\" (username, password_hash) SELECT ?,? " +
+            String sql = "INSERT  INTO public.\"user\" (username, email, password_hash) SELECT ?,?,? " +
                     "WHERE NOT EXISTS (SELECT 1 FROM public.\"user\" WHERE username=?)";
             PreparedStatement statement = conn.prepareStatement(sql);
             statement.setString(1, name);
-            statement.setString(2, password);
-            statement.setString(3, name);
+            statement.setString(2, email);
+            statement.setString(3, password);
+            statement.setString(4, name);
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -72,6 +73,36 @@ public class UserDaoJdbc implements UserDao {
             throw new RuntimeException(e);
         }
         return null;
+    }
+
+    @Override
+    public boolean doesGivenEmailExists(String email) {
+        try(Connection conn = ds.getConnection()){
+            String sql = "SELECT email FROM public.\"user\" WHERE email=(?)";
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setString(1, email);
+            ResultSet rs = statement.executeQuery();
+
+            return rs.next();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public boolean doesGivenUserExists(String username) {
+        try(Connection conn = ds.getConnection()){
+            String sql = "SELECT email FROM public.\"user\" WHERE username=(?)";
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setString(1, username);
+            ResultSet rs = statement.executeQuery();
+
+            return rs.next();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private int getNextId(){
