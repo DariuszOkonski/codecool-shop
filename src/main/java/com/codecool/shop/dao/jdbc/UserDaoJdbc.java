@@ -4,10 +4,7 @@ import com.codecool.shop.dao.UserDao;
 import com.codecool.shop.model.User;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class UserDaoJdbc implements UserDao {
     private DataSource ds;
@@ -57,6 +54,21 @@ public class UserDaoJdbc implements UserDao {
         return null;
     }
 
+    public Integer getUserIdByEmail(String email) {
+        try(Connection conn = ds.getConnection()){
+            String sql = "SELECT id FROM public.\"user\" WHERE email=(?)";
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setString(1, email);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
     @Override
     public User getById(int userId) {
         try(Connection conn = ds.getConnection()){
@@ -91,11 +103,11 @@ public class UserDaoJdbc implements UserDao {
     }
 
     @Override
-    public String getPasswordOfUser(String username) {
+    public String getPasswordOfUser(String email) {
         try(Connection conn = ds.getConnection()){
-            String sql = "SELECT password_hash FROM public.\"user\" WHERE username=(?)";
+            String sql = "SELECT password_hash FROM public.\"user\" WHERE email=(?)";
             PreparedStatement statement = conn.prepareStatement(sql);
-            statement.setString(1, username);
+            statement.setString(1, email);
             ResultSet rs = statement.executeQuery();
             if (rs.next());
                 return rs.getString(1);
@@ -128,6 +140,22 @@ public class UserDaoJdbc implements UserDao {
             return rs.getInt("id")+1;
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public void storeUserSessionInfo(int userId, String sessionToken, Timestamp expiration) {
+        try(Connection conn = ds.getConnection()){
+            String sql = "INSERT INTO user_session (user_id, session_expiration, session_token)" +
+                    " VALUES (?, ?, ?) ";
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setInt(1, userId);
+            statement.setTimestamp(2, expiration);
+            statement.setString(3, sessionToken);
+            System.out.println(statement);
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

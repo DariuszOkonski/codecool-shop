@@ -3,6 +3,7 @@ package com.codecool.shop.dao.implementation;
 import com.codecool.shop.dao.UserDao;
 import com.codecool.shop.model.User;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,5 +63,15 @@ public class UserDaoMem implements UserDao {
     @Override
     public String getPasswordOfUser(String username) {
         return null;
+    }
+
+    @Override
+    public Integer getUserIdByEmail(String email) {
+        return null;
+    }
+
+    @Override
+    public void storeUserSessionInfo(int userId, String sessionToken, Timestamp expiration) {
+
     }
 }

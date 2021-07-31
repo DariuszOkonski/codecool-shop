@@ -2,6 +2,8 @@ package com.codecool.shop.dao;
 
 import com.codecool.shop.model.User;
 
+import java.sql.Timestamp;
+
 public interface UserDao {
 
 
@@ -12,5 +14,7 @@ public interface UserDao {
     boolean doesGivenEmailExists(String email);
     boolean doesGivenUserExists(String user);
     String getPasswordOfUser(String username);
+    Integer getUserIdByEmail(String email);
+    void storeUserSessionInfo(int userId, String sessionToken, Timestamp expiration);
 
 }

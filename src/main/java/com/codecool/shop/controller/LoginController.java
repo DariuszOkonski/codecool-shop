@@ -1,5 +1,6 @@
 package com.codecool.shop.controller;
 
+import com.codecool.shop.model.Cart;
 import com.codecool.shop.service.PasswordService;
 
 import javax.servlet.annotation.WebServlet;
@@ -8,18 +9,75 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.sql.Date;
+import java.sql.Timestamp;
 
 @WebServlet(urlPatterns = {"/login"})
 public class LoginController extends BaseController{
     private PasswordService ps = new PasswordService();
+
+    private final String ERROR_MSG = "error_message";
+    private final String SUCCESS_MSG = "success_message";
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
+        setTemplateContext(req, resp);
+        serviceSessionValidation(req);
+
+        int userId = (int) req.getSession().getAttribute("user_id");
+
+        String sessionToken = (String) req.getSession().getAttribute("token");
+
+        System.out.println("FOUND TOKEN: " + sessionToken);
+
+        String sessionId = req.getSession().getId();
+        setContextVariables(cartDataStore.getNewestOfUser(userId), sessionId, null, null);
+
+
+        engine.process("/login.html", context, resp.getWriter());
+
+    }
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String user = req.getParameter("username");
+        String email = req.getParameter("email");
         String password = req.getParameter("password");
 
-        String passwordHash = userDataStore.getPasswordOfUser(user);
+        String passwordHash = userDataStore.getPasswordOfUser(email);
 
         // GOING TRUE - seems ok prototype
         System.out.println(ps.passwordMatches(password, passwordHash) + " !!!!!!! PASSWORD CHECK");
+
+        boolean areCredentialsOk = ps.passwordMatches(password, passwordHash);
+
+        //store session in db, generate token, send it to browser
+        if (areCredentialsOk) setSession(req, email);
+
+        resp.sendRedirect("/login");
+    }
+
+    private void setSession(HttpServletRequest request, String email){
+        String token = ps.generateToken();
+        System.out.println("TOKEN: " + token);
+        int userId = userDataStore.getUserIdByEmail(email);
+        System.out.println("USERID: " + userId);
+        Timestamp expirationDate = ps.getExpirationDate();
+        System.out.println("Expiration: " + expirationDate);
+
+        userDataStore.storeUserSessionInfo(userId, token, expirationDate);
+
+        // store token in browser cookie. not sure if works.
+        request.getSession().setAttribute("token", token);
+        request.getSession().getAttribute("token");
+    }
+
+    private void setContextVariables(Cart cart, String sessionID, String errorMessage, String successMessage) {
+        // TODO: check if refactorable
+        context.setVariable("userId", sessionID);
+        context.setVariable("itemsInCart", cart.getTotalProductCount());
+        context.setVariable("cart", cart);
+        context.setVariable(ERROR_MSG, errorMessage);
+        context.setVariable(SUCCESS_MSG, successMessage);
     }
 }

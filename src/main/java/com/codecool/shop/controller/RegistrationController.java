@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 
 @WebServlet(urlPatterns = {"/registration"})
@@ -37,7 +36,7 @@ public class RegistrationController extends BaseController {
         engine.process("/register.html", context, resp.getWriter());
     }
 
-        @Override
+    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
             String user = req.getParameter("username");
             String email = req.getParameter("email");

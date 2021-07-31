@@ -1,16 +1,18 @@
 package com.codecool.shop.service;
 
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import javax.xml.bind.DatatypeConverter;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
+import java.sql.Timestamp;
+import java.util.Base64;
+
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 
 public class PasswordService {
+
+    SecureRandom secureRandom = new SecureRandom();
+    long defaultExpiration = 259200000L; // Three days in seconds.
 
 
     public String getPasswordHash(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
@@ -29,5 +31,17 @@ public class PasswordService {
 
     public boolean passwordMatches(String password, String hashedPassword){
         return BCrypt.checkpw(password, hashedPassword);
+    }
+
+    public String generateToken() {
+        byte[] randomBytes = new byte[24];
+        secureRandom.nextBytes(randomBytes);
+        return Base64.getEncoder().encodeToString(randomBytes);
+    }
+
+    public Timestamp getExpirationDate(){
+        long timeNow = new java.util.Date().getTime();
+
+        return new Timestamp(timeNow + defaultExpiration);
     }
 }
