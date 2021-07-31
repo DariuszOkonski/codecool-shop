@@ -35,30 +35,38 @@
 
 <div class="container">
   <h2>Register: </h2>
-  <div class="flex-column p-2" role="group">
-    <form action="/registration" method="post">
 
-      <div class="form-group">
-        <label for="user">User:</label>
-        <input type="text" name="username" id="user" class="form-control" required>
-      </div>
+  <div th:switch="${error_message}">
+    <p th:case="'emailExists'">Given email already exists</p>
+    <p th:case="'userExists'">Given user already exists</p>
+  </div>
 
-      <div class="form-group">
-        <label for="email">Email:</label>
-        <input type="email" name="email" id="email" class="form-control" required>
-      </div>
+  <div th:switch="${success_message}">
+    <p th:case="'success'">SUCCESS</p>
+    <div th:case="*" class="flex-column p-2" role="group">
+      <form action="/registration" method="post">
 
-      <div class="form-group">
-        <label for="password">Password:</label>
-        <input type="password" name="password" id="password" class="form-control" required>
-      </div>
+        <div class="form-group">
+          <label for="user">User:</label>
+          <input type="text" name="username" id="user" class="form-control" required>
+        </div>
 
-      <button type="submit" id="payment-submit" class="btn btn-primary mt-2">
-        Continue
-      </button>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" name="email" id="email" class="form-control" required>
+        </div>
 
-    </form>
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <input type="password" name="password" id="password" class="form-control" required>
+        </div>
 
+        <button type="submit" id="payment-submit" class="btn btn-primary mt-2">
+          Continue
+        </button>
+
+      </form>
+    </div>
   </div>
 </div>
 

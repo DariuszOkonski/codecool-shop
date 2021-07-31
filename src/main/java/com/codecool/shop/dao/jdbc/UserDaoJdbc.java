@@ -18,7 +18,7 @@ public class UserDaoJdbc implements UserDao {
     @Override
     public int createNewGuest() {
         int nextId=getNextId();
-        add(String.format("guest%d", nextId), "abx@abc", "");
+        add(String.format("guest%d", nextId), String.format("guest%d@cc_shop.pl", nextId), "");
         return nextId;
     }
 
@@ -93,7 +93,7 @@ public class UserDaoJdbc implements UserDao {
     @Override
     public boolean doesGivenUserExists(String username) {
         try(Connection conn = ds.getConnection()){
-            String sql = "SELECT email FROM public.\"user\" WHERE username=(?)";
+            String sql = "SELECT username FROM public.\"user\" WHERE username=(?)";
             PreparedStatement statement = conn.prepareStatement(sql);
             statement.setString(1, username);
             ResultSet rs = statement.executeQuery();
