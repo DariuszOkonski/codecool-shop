@@ -39,6 +39,7 @@
   <div th:switch="${error_message}">
     <p th:case="'emailExists'">Given email already exists</p>
     <p th:case="'userExists'">Given user already exists</p>
+    <p th:case="'passwordInvalid'">Password is invalid</p>
   </div>
 
   <div th:switch="${success_message}">

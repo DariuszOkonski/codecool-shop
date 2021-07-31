@@ -225,7 +225,7 @@ CREATE TABLE "user"
 (
     "id"            serial NOT NULL,
     username      varchar(50) UNIQUE NOT NULL,
-    password_hash varchar(50) NOT NULL,
+    password_hash text NOT NULL,
     email         varchar (50) UNIQUE NOT NULL,
     CONSTRAINT PK_user PRIMARY KEY ( "id" )
 );

@@ -11,5 +11,6 @@ public interface UserDao {
     User getById(int userId);
     boolean doesGivenEmailExists(String email);
     boolean doesGivenUserExists(String user);
+    String getPasswordOfUser(String username);
 
 }

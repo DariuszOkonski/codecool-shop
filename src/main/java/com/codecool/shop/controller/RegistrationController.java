@@ -1,16 +1,21 @@
 package com.codecool.shop.controller;
 
 import com.codecool.shop.model.Cart;
+import com.codecool.shop.service.PasswordService;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
 
 @WebServlet(urlPatterns = {"/registration"})
 public class RegistrationController extends BaseController {
     private final String ERROR_MSG = "error_message";
     private final String SUCCESS_MSG = "success_message";
+    private final PasswordService passwordService = new PasswordService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -26,6 +31,9 @@ public class RegistrationController extends BaseController {
 
         setContextVariables(cartDataStore.getNewestOfUser(userId), sessionId, errorMessage, successMessage);
 
+        if (successMessage != "")
+            removeSessionValidationAttributes(req);
+
         engine.process("/register.html", context, resp.getWriter());
     }
 
@@ -35,30 +43,25 @@ public class RegistrationController extends BaseController {
             String email = req.getParameter("email");
             String password = req.getParameter("password");
 
-            boolean isEmailExists = userDataStore.doesGivenEmailExists(email);
-            boolean isUserNameExists = userDataStore.doesGivenUserExists(user);
 
-            System.out.println("check email: " + isEmailExists);
-            System.out.println("check user: " + isUserNameExists);
-
-            req.getSession().removeAttribute(ERROR_MSG);
-            req.getSession().removeAttribute(SUCCESS_MSG);
-
-
-            String messageType = "";
-            String message = "";
-            if(isEmailExists ) {
-                message = "emailExists";
-                messageType = ERROR_MSG;
-            } else if(isUserNameExists) {
-                message = "userExists";
-                messageType = ERROR_MSG;
-            } else {
-                message = "success";
-                messageType = SUCCESS_MSG;
+            // PASSWORD
+            String hashedPassword = "";
+            try {
+                hashedPassword = passwordService.getPasswordHash(password);
+            } catch (NoSuchAlgorithmException | InvalidKeySpecException e ) {
+                e.printStackTrace();
             }
 
-            req.getSession().setAttribute(messageType, message);
+
+            // USERNAME/EMAIL VALIDATION
+            setRegistrationFeedbackMessage(user, email, hashedPassword, req);
+
+            System.out.println("Password hash =>" + hashedPassword);
+
+            // TODO - program goes to adding user when password is EMPTY so SUCCESS_MSG is set - to fix!!
+            if (req.getSession().getAttribute(SUCCESS_MSG) != ""){
+                userDataStore.add(user, email, hashedPassword);
+            }
             resp.sendRedirect("/registration");
 
 
@@ -80,5 +83,35 @@ public class RegistrationController extends BaseController {
         context.setVariable("cart", cart);
         context.setVariable(ERROR_MSG, errorMessage);
         context.setVariable(SUCCESS_MSG, successMessage);
+    }
+
+    private void setRegistrationFeedbackMessage(String user, String email, String password, HttpServletRequest req){
+        boolean isEmailExists = userDataStore.doesGivenEmailExists(email);
+        boolean isUserNameExists = userDataStore.doesGivenUserExists(user);
+
+        removeSessionValidationAttributes(req);
+        String messageType = "";
+        String message = "";
+        if(isEmailExists ) {
+            message = "emailExists";
+            messageType = ERROR_MSG;
+        } else if(isUserNameExists) {
+            message = "userExists";
+            messageType = ERROR_MSG;
+        } else {
+            if (password != ""){
+                message = "success";
+                messageType = SUCCESS_MSG;
+            } else {
+                message = "passwordInvalid";
+                messageType = ERROR_MSG;
+            }
+        }
+        req.getSession().setAttribute(messageType, message);
+    }
+    private void removeSessionValidationAttributes(HttpServletRequest req){
+        req.getSession().removeAttribute(ERROR_MSG);
+        req.getSession().removeAttribute(SUCCESS_MSG);
+
     }
 }

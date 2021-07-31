@@ -91,6 +91,20 @@ public class UserDaoJdbc implements UserDao {
     }
 
     @Override
+    public String getPasswordOfUser(String username) {
+        try(Connection conn = ds.getConnection()){
+            String sql = "SELECT password_hash FROM public.\"user\" WHERE username=(?)";
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setString(1, username);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next());
+                return rs.getString(1);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public boolean doesGivenUserExists(String username) {
         try(Connection conn = ds.getConnection()){
             String sql = "SELECT username FROM public.\"user\" WHERE username=(?)";

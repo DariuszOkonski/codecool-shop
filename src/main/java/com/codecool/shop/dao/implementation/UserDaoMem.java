@@ -58,4 +58,9 @@ public class UserDaoMem implements UserDao {
         // TODO - write queries to singleton
         return false;
     }
+
+    @Override
+    public String getPasswordOfUser(String username) {
+        return null;
+    }
 }
