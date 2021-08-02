@@ -70,6 +70,7 @@ public class LoginController extends BaseController{
         // store token in browser cookie. not sure if works.
         request.getSession().setAttribute("token", token);
         request.getSession().getAttribute("token");
+        request.getSession().setAttribute("user_id", userId);
     }
 
     private void setContextVariables(Cart cart, String sessionID, String errorMessage, String successMessage) {

@@ -12,5 +12,7 @@
 		<param-name>org.eclipse.jetty.servlet.maxCacheSize</param-name>
 		<param-value>0</param-value>
 	</context-param>
-
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
 </web-app>
