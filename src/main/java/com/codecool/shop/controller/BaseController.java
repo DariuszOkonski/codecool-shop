@@ -93,6 +93,15 @@ public abstract class BaseController extends HttpServlet {
         cartDataStore.add(cart);
     }
 
+    void setNewCart(int userId) {
+
+//        req.getSession().setAttribute("user_id", newId);
+        Cart cart = new Cart(userId);
+        cart.setUserId(userId);
+
+        cartDataStore.add(cart);
+    }
+
     protected void serviceSessionValidation(HttpServletRequest req) {
         if (!doesCartSessionExist(req)){
             System.out.println("Session setting");

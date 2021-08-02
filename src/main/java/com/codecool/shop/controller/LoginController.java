@@ -1,15 +1,13 @@
 package com.codecool.shop.controller;
 
 import com.codecool.shop.model.Cart;
+import com.codecool.shop.model.Order;
 import com.codecool.shop.service.PasswordService;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-import java.sql.Date;
 import java.sql.Timestamp;
 
 @WebServlet(urlPatterns = {"/login"})
@@ -71,6 +69,7 @@ public class LoginController extends BaseController{
         request.getSession().setAttribute("token", token);
         request.getSession().getAttribute("token");
         request.getSession().setAttribute("user_id", userId);
+        setNewCartIfOldAreFinished(userId);
     }
 
     private void setContextVariables(Cart cart, String sessionID, String errorMessage, String successMessage) {
@@ -80,5 +79,13 @@ public class LoginController extends BaseController{
         context.setVariable("cart", cart);
         context.setVariable(ERROR_MSG, errorMessage);
         context.setVariable(SUCCESS_MSG, successMessage);
+    }
+
+    private void setNewCartIfOldAreFinished(int userId){
+        Cart cart = cartDataStore.getNewestOfUser(userId);
+        if (cart == null) {
+            setNewCart(userId);
+        }
+
     }
 }

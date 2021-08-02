@@ -13,6 +13,9 @@ public class Cart extends BaseModel {
     public Cart(String name) {
         super(name);
     }
+    public Cart(int userId) {
+        super(String.valueOf(userId));
+    }
 
     public Map<Product, Integer> getProductsWithQuantityList() {
         return productsWithQuantityList;

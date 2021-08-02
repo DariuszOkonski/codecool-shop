@@ -24,7 +24,11 @@ public class Order extends BaseModel {
         return customerData.getUserId();
     }
     public boolean isPaymentSuccessfull() {
-        return payment.isFinished();
+        try {
+            return payment.isFinished();
+        } catch (NullPointerException e){
+            return false;
+        }
     }
 
     public void setPaymentSuccessfull(boolean paymentSuccessfull) {

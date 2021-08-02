@@ -15,8 +15,9 @@ public class CheckoutController extends BaseController {
         setTemplateContext(req, resp);
         serviceSessionValidation(req);
         String sessionId = req.getSession().getId();
+        int user_id = (int) req.getSession().getAttribute("user_id");
 
-        setContextVariables(cartDataStore.getBySessionId(sessionId), sessionId);
+        setContextVariables(cartDataStore.getNewestOfUser(user_id), sessionId);
 
         engine.process("product/checkout.html", context, resp.getWriter());
     }
