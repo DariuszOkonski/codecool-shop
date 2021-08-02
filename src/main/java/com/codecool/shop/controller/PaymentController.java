@@ -26,6 +26,9 @@ public class PaymentController extends BaseController{
         userId = (int)req.getSession().getAttribute("user_id");
         String currentSession = req.getSession().getId();
 
+        setLoggedUsername(userId);
+
+
         if (orderService.hasNotPendingOrder(userId))
             orderService.setFreshOrderForUser(userId);
 
@@ -88,6 +91,8 @@ public class PaymentController extends BaseController{
 
     private void setContextVariables(String sessionID, BigDecimal cartSumPrice, String chosenPaymentMethod, BigDecimal sumToPay, Cart cart) {
         // TODO: check if refactorable
+        setUserNameToContext();
+
         context.setVariable("userId", sessionID);
         context.setVariable("amountToPay", cartSumPrice);
         context.setVariable("itemsInCart", cart.getTotalProductCount());

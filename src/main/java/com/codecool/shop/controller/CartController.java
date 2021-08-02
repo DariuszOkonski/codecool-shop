@@ -14,6 +14,7 @@ public class CartController extends BaseController {
         setTemplateContext(req, resp);
         serviceSessionValidation(req);
         int userId = (int) req.getSession().getAttribute("user_id");
+        setLoggedUsername(userId);
         String sessionId = req.getSession().getId();
 
         setContextVariables(cartDataStore.getNewestOfUser(userId), sessionId);
@@ -36,9 +37,10 @@ public class CartController extends BaseController {
         resp.sendRedirect(referrer);
     }
 
-    private void setContextVariables(Cart cart, String sessionID) {
+    private void setContextVariables(Cart cart, String username) {
         // TODO: check if refactorable
-        context.setVariable("userId", sessionID);
+        setUserNameToContext();
+        context.setVariable("userId", username);
         context.setVariable("itemsInCart", cart.getTotalProductCount());
         context.setVariable("cart", cart);
     }

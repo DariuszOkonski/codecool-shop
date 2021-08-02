@@ -15,9 +15,10 @@ public class CheckoutController extends BaseController {
         setTemplateContext(req, resp);
         serviceSessionValidation(req);
         String sessionId = req.getSession().getId();
-        int user_id = (int) req.getSession().getAttribute("user_id");
+        int userId = (int) req.getSession().getAttribute("user_id");
+        setLoggedUsername(userId);
 
-        setContextVariables(cartDataStore.getNewestOfUser(user_id), sessionId);
+        setContextVariables(cartDataStore.getNewestOfUser(userId), sessionId);
 
         engine.process("product/checkout.html", context, resp.getWriter());
     }
@@ -56,6 +57,7 @@ public class CheckoutController extends BaseController {
 
     private void setContextVariables(Cart cart, String sessionID) {
         // TODO: check if refactorable
+        setUserNameToContext();
         context.setVariable("userId", sessionID);
         context.setVariable("itemsInCart", cart.getTotalProductCount());
         context.setVariable("cart", cart);

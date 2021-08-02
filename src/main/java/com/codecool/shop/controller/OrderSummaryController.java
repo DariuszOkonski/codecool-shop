@@ -27,6 +27,9 @@ public class OrderSummaryController extends BaseController {
 
         //        System.out.println(req.getSession().getAttribute("processed_order") + " PRCESSD ORDER ");
         // TODO MOVE FROM SESSION ID BASED PROCESSING TO SETTING ORDER ID IN SESSION
+        int userId = (int) req.getSession().getAttribute("user_id");
+        setLoggedUsername(userId);
+
         int orderId = (int) req.getSession().getAttribute("order_id");
         order = orderDataStore.find(orderId);
 
@@ -98,6 +101,7 @@ public class OrderSummaryController extends BaseController {
     }
 
     private void setContextVariables(String status, String message, String orderNumber, HttpServletRequest req) {
+        setUserNameToContext();
         context.setVariable("status", status);
         context.setVariable("itemsInCart",
                 cartDataStore

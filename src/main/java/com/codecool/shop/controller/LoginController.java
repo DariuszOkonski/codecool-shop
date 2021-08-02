@@ -24,6 +24,7 @@ public class LoginController extends BaseController{
         serviceSessionValidation(req);
 
         int userId = (int) req.getSession().getAttribute("user_id");
+        setLoggedUsername(userId);
 
         String sessionToken = (String) req.getSession().getAttribute("token");
 
@@ -74,6 +75,7 @@ public class LoginController extends BaseController{
 
     private void setContextVariables(Cart cart, String sessionID, String errorMessage, String successMessage) {
         // TODO: check if refactorable
+        setUserNameToContext();
         context.setVariable("userId", sessionID);
         context.setVariable("itemsInCart", cart.getTotalProductCount());
         context.setVariable("cart", cart);

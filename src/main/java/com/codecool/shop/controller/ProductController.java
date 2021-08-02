@@ -27,6 +27,9 @@ public class ProductController extends BaseController {
 
         int supplier_id = req.getParameter("supplier_id") == null ? 0 : Integer.parseInt(req.getParameter("supplier_id"));
         int category_id = req.getParameter("category_id") == null ? 0 : Integer.parseInt(req.getParameter("category_id"));
+        int userId = (int) req.getSession().getAttribute("user_id");
+
+        setLoggedUsername(userId);
 
         boolean categoryProvided = category_id != 0;
         boolean supplierProvided = supplier_id != 0;
@@ -50,6 +53,8 @@ public class ProductController extends BaseController {
 
     private void setContextVariables(ProductCategoryDao productCategoryDataStore, ProductService productService, WebContext context, int category_id, List<Product> products, List<Supplier> suppliers, String sessionID, int itemsInCart, int supplierId) {
         // TODO: check if refactorable
+
+        setUserNameToContext();
         context.setVariable("categories", productCategoryDataStore.getAll());
         context.setVariable("category", productService.getProductCategory(category_id));
         context.setVariable("supplier", supplierDataStore.find(supplierId));

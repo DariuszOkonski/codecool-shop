@@ -32,6 +32,8 @@ public abstract class BaseController extends HttpServlet {
     protected CartService cartService = null;
     protected ConfigService configService = new ConfigService();
 
+    protected String loggedUsername;
+
     public BaseController() {
 
         try {
@@ -114,5 +116,13 @@ public abstract class BaseController extends HttpServlet {
     protected void setTemplateContext(HttpServletRequest req, HttpServletResponse resp) {
         engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         context = new WebContext(req, resp, req.getServletContext());
+    }
+
+    protected void setUserNameToContext(){
+        context.setVariable("username", loggedUsername);
+    }
+
+    protected void setLoggedUsername(int userId){
+        loggedUsername = userDataStore.getById(userId).getName();
     }
 }

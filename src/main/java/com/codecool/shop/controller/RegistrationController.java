@@ -25,6 +25,9 @@ public class RegistrationController extends BaseController {
         int userId = (int) req.getSession().getAttribute("user_id");
         String sessionId = req.getSession().getId();
 
+        setLoggedUsername(userId);
+
+
         String errorMessage = req.getSession().getAttribute(ERROR_MSG) != null ? req.getSession().getAttribute(ERROR_MSG).toString() : "";
         String successMessage = req.getSession().getAttribute(SUCCESS_MSG) != null ? req.getSession().getAttribute(SUCCESS_MSG).toString() : "";
 
@@ -77,6 +80,8 @@ public class RegistrationController extends BaseController {
 
     private void setContextVariables(Cart cart, String sessionID, String errorMessage, String successMessage) {
         // TODO: check if refactorable
+        setUserNameToContext();
+
         context.setVariable("userId", sessionID);
         context.setVariable("itemsInCart", cart.getTotalProductCount());
         context.setVariable("cart", cart);
