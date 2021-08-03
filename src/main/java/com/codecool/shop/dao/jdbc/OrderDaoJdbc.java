@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class OrderDaoJdbc implements OrderDao {
 
@@ -32,6 +34,52 @@ public class OrderDaoJdbc implements OrderDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void getAllOrdersForSpecificUser(int user_id) {
+//        select * from public.order where user_id = 3;
+//        try(Connection conn = dataSource.getConnection()) {
+//            String sql = " SELECT  cart_id, user_id, id, payment_method, order_status_id  FROM \"order\" WHERE user_id=?";
+//            PreparedStatement statement = conn.prepareStatement(sql);
+//            statement.setInt(1, user_id);
+//
+//            ResultSet rs = statement.executeQuery();
+//            List<Order> orderList = new ArrayList<>();
+//            rs.next();
+//
+//
+//            while (rs.next()) {
+//                var order = new
+//            }
+
+//            int cart_id = rs.getInt(1);
+//            int user_id = rs.getInt(2);
+//            int ord_id = rs.getInt(3);
+//            String payment_method = rs.getString(4);
+//            int status_id = rs.getInt(5);
+//
+//            Order order = new Order(
+//                    DatabaseManager.getINSTANCE().getCustomerDataDao()
+//                            .find(user_id),
+//                    DatabaseManager.getINSTANCE().getCartDao()
+//                            .find(cart_id)
+//            );
+//            order.setId(ord_id);
+//
+//            if (payment_method != null) {
+//                order.setPayment(
+//                        PaymentMethods.build(
+//                                payment_method,
+//                                order.getCustomerCart().getSumPrice(),
+//                                order.getId()
+//                        )
+//                );
+//                order.getPayment().setFinished(status_id == FINISHED_ID);
+//            }
+//            return order;
+//        } catch (SQLException e){
+//            return null;
+//        }
     }
 
     @Override
