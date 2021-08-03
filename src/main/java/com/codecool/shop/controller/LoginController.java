@@ -40,20 +40,25 @@ public class LoginController extends BaseController{
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String email = req.getParameter("email");
-        String password = req.getParameter("password");
+        try {
+            String email = req.getParameter("email");
+            String password = req.getParameter("password");
 
-        String passwordHash = userDataStore.getPasswordOfUser(email);
+            String passwordHash = userDataStore.getPasswordOfUser(email);
 
-        // GOING TRUE - seems ok prototype
-        System.out.println(ps.passwordMatches(password, passwordHash) + " !!!!!!! PASSWORD CHECK");
+            // GOING TRUE - seems ok prototype
+            System.out.println(ps.passwordMatches(password, passwordHash) + " !!!!!!! PASSWORD CHECK");
 
-        boolean areCredentialsOk = ps.passwordMatches(password, passwordHash);
+            boolean areCredentialsOk = ps.passwordMatches(password, passwordHash);
 
-        //store session in db, generate token, send it to browser
-        if (areCredentialsOk) setSession(req, email);
+            //store session in db, generate token, send it to browser
+            if (areCredentialsOk) setSession(req, email);
 
-        resp.sendRedirect("/login");
+            resp.sendRedirect("/");
+        } catch (Exception e) {
+            //TODO: can be done better
+            resp.sendRedirect("/login");
+        }
     }
 
     private void setSession(HttpServletRequest request, String email){

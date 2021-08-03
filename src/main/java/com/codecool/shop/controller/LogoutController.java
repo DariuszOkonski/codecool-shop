@@ -10,8 +10,6 @@ public class LogoutController extends BaseController {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-//        setTemplateContext(req, resp);
-//        serviceSessionValidation(req);
         req.getSession().invalidate();
         resp.sendRedirect("/");
 
