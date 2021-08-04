@@ -501,6 +501,7 @@ CREATE TABLE "order"
     user_id         integer NOT NULL,
     order_number    text NOT NULL,
     payment_method    varchar(20),
+    order_date      timestamp NOT NULL default (now()),
     CONSTRAINT PK_order PRIMARY KEY ( "id" ),
     CONSTRAINT FK_106 FOREIGN KEY ( cart_id ) REFERENCES cart ( "id" ),
     CONSTRAINT FK_109 FOREIGN KEY ( user_id ) REFERENCES "user" ( "id" ),

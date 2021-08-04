@@ -3,6 +3,7 @@ package com.codecool.shop.model;
 
 import com.codecool.shop.model.payment.PaymentMethod;
 
+import java.sql.Date;
 import java.time.LocalDateTime;
 
 public class Order extends BaseModel {
@@ -11,7 +12,7 @@ public class Order extends BaseModel {
     private PaymentMethod payment;
     private Cart customerCart;
     private CustomerData customerData;
-
+    private Date dateTime;
 
     public Order(CustomerData customerData, Cart customerCart) {
         super(customerData.getName(), "transaction date: " + LocalDateTime.now());
@@ -19,6 +20,15 @@ public class Order extends BaseModel {
         this.customerCart = customerCart;
         this.isPaymentSuccessfull = false; // TODO: remove
     }
+
+    public Date getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(Date dateTime) {
+        this.dateTime = dateTime;
+    }
+
 
     public int getUserId(){
         return customerData.getUserId();

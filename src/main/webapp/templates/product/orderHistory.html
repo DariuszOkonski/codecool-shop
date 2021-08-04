@@ -43,7 +43,42 @@
       <div class="block-heading">
         <h2>Order History</h2>
       </div>
-      <p th:each="order: ${orderList}" th:text="${order}"></p>
+      <div th:each="order: ${orderList}">
+        <h2>
+          Is Payment successful <span th:text="${order.isPaymentSuccessfull()}"></span>
+        </h2>
+        <div>
+          Customer cart:
+
+          <table class="table">
+            <thead>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Category</th>
+              <th>Quantity</th>
+            </thead>
+            <tbody >
+              <tr th:each="productWithQuantity: ${order.getCustomerCart().getProductsWithQuantityList()}">
+                <td th:text="${productWithQuantity.key.name}"></td>
+                <td th:text="${productWithQuantity.key.defaultPrice}"></td>
+                <td th:text="${productWithQuantity.key.productCategory.name}"></td>
+                <td th:text="${productWithQuantity.value}"></td>
+
+              </tr>
+
+            </tbody>
+          </table>
+          <p>Price of cart: <strong th:text="${order.getCustomerCart().getSumPrice()}"></strong></p>
+        </div>
+
+      </div>
+
+
+
+
+
+
+
 <!--      <div class="content">-->
 <!--        <div class="row">-->
 <!--          <div class="col-md-12">-->

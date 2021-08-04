@@ -11,7 +11,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class OrderDaoJdbc implements OrderDao {
@@ -51,7 +53,7 @@ public class OrderDaoJdbc implements OrderDao {
 
         //get orders list from db
         try (Connection conn = dataSource.getConnection()) {
-            String sql = "SELECT o.id, order_number, u.username, cart_id, payment_method, os.name " +
+            String sql = "SELECT o.order_date, o.id, order_number, cart_id, payment_method, os.name " +
                     "FROM \"order\" o " +
                     "INNER JOIN \"user\" u ON user_id = u.id " +
                     "INNER JOIN \"order_status\" os on o.order_status_id = os.id " +
@@ -71,8 +73,11 @@ public class OrderDaoJdbc implements OrderDao {
                 var cart = cartDao.find(cart_id);
                 var customerData = customerDataDao.find(user_id);
                 var order = new Order(customerData, cart);
+                order.setDateTime(rs.getDate("order_date"));
                 orderList.add(order);
             }
+
+
             return orderList;
         } catch (SQLException e) {
             return null;
