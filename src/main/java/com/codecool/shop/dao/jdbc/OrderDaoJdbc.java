@@ -1,5 +1,7 @@
 package com.codecool.shop.dao.jdbc;
 
+import com.codecool.shop.dao.CartDao;
+import com.codecool.shop.dao.CustomerDataDao;
 import com.codecool.shop.dao.OrderDao;
 import com.codecool.shop.model.Order;
 import com.codecool.shop.model.payment.PaymentMethods;
@@ -36,50 +38,46 @@ public class OrderDaoJdbc implements OrderDao {
         }
     }
 
-    public void getAllOrdersForSpecificUser(int user_id) {
-//        select * from public.order where user_id = 3;
-//        try(Connection conn = dataSource.getConnection()) {
-//            String sql = " SELECT  cart_id, user_id, id, payment_method, order_status_id  FROM \"order\" WHERE user_id=?";
-//            PreparedStatement statement = conn.prepareStatement(sql);
-//            statement.setInt(1, user_id);
-//
-//            ResultSet rs = statement.executeQuery();
-//            List<Order> orderList = new ArrayList<>();
-//            rs.next();
-//
-//
-//            while (rs.next()) {
-//                var order = new
-//            }
+    public List<Order> getAllOrdersForSpecificUser(int user_id) {
 
-//            int cart_id = rs.getInt(1);
-//            int user_id = rs.getInt(2);
-//            int ord_id = rs.getInt(3);
-//            String payment_method = rs.getString(4);
-//            int status_id = rs.getInt(5);
-//
-//            Order order = new Order(
-//                    DatabaseManager.getINSTANCE().getCustomerDataDao()
-//                            .find(user_id),
-//                    DatabaseManager.getINSTANCE().getCartDao()
-//                            .find(cart_id)
-//            );
-//            order.setId(ord_id);
-//
-//            if (payment_method != null) {
-//                order.setPayment(
-//                        PaymentMethods.build(
-//                                payment_method,
-//                                order.getCustomerCart().getSumPrice(),
-//                                order.getId()
-//                        )
-//                );
-//                order.getPayment().setFinished(status_id == FINISHED_ID);
-//            }
-//            return order;
-//        } catch (SQLException e){
-//            return null;
-//        }
+/**       - There is an `Order history` menu item
+ - provide a list with all the Orders of that user, with the following details:
+ - order date
+ - order status (checked / paid / confirmed / shipped)
+ - total price
+ - product list (with product name, price)
+
+ */
+
+        //get orders list from db
+        try (Connection conn = dataSource.getConnection()) {
+            String sql = "SELECT o.id, order_number, u.username, cart_id, payment_method, os.name " +
+                    "FROM \"order\" o " +
+                    "INNER JOIN \"user\" u ON user_id = u.id " +
+                    "INNER JOIN \"order_status\" os on o.order_status_id = os.id " +
+                    "WHERE user_id=?";
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setInt(1, user_id);
+
+            // make it a list
+
+            ResultSet rs = statement.executeQuery();
+            List<Order> orderList = new ArrayList<>();
+            CartDao cartDao = DatabaseManager.getINSTANCE().getCartDao();
+            CustomerDataDao customerDataDao = DatabaseManager.getINSTANCE().getCustomerDataDao();
+
+            while (rs.next()) {
+                int cart_id = rs.getInt("cart_id");
+                var cart = cartDao.find(cart_id);
+                var customerData = customerDataDao.find(user_id);
+                var order = new Order(customerData, cart);
+                orderList.add(order);
+            }
+            return orderList;
+        } catch (SQLException e) {
+            return null;
+        }
+
     }
 
     @Override

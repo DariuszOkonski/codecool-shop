@@ -2,6 +2,8 @@ package com.codecool.shop.dao;
 
 import com.codecool.shop.model.Order;
 
+import java.util.List;
+
 public interface OrderDao {
     int FINISHED_ID = 2;
     int NOT_FINISHED_ID = 1;
@@ -16,6 +18,6 @@ public interface OrderDao {
     Order find(int id);
     Order getByName(String userName);
     Order getNewestOfUser(int userId);
-
+    List<Order> getAllOrdersForSpecificUser(int user_id);
     void setPaymentStatus(Order ord, boolean paymentPossible);
 }

@@ -43,6 +43,7 @@
       <div class="block-heading">
         <h2>Order History</h2>
       </div>
+      <p th:each="order: ${orderList}" th:text="${order}"></p>
 <!--      <div class="content">-->
 <!--        <div class="row">-->
 <!--          <div class="col-md-12">-->

@@ -21,6 +21,11 @@ public class OrderDaoMem implements OrderDao {
     }
 
     @Override
+    public List<Order> getAllOrdersForSpecificUser(int user_id) {
+        return null;
+    }
+
+    @Override
     public void setPaymentStatus(Order ord, boolean paymentPossible) {
         ord.setPaymentSuccessfull(paymentPossible);
     }
