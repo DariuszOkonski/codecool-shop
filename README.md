@@ -1,4 +1,5 @@
-# Codecool shop (sprint 2)
+![image](src/img/main.png)
+# Codecool shop
 
 ## Story
 
